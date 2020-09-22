@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.jellehuibregtse.cah</groupId>
-    <artifactId>discover-server</artifactId>
+    <artifactId>discovery-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>discover-server</name>
+    <name>discovery-server</name>
     <description>The discovery server for all microservices</description>
 
     <properties>
