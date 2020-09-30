@@ -1,14 +1,10 @@
 package com.jellehuibregtse.cah.cardservice.controllers;
 
 import com.jellehuibregtse.cah.cardservice.models.Card;
-import com.jellehuibregtse.cah.cardservice.models.CardType;
 import com.jellehuibregtse.cah.cardservice.repositories.CardRepository;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,8 +18,22 @@ public class CardController {
     }
 
     @CrossOrigin
-    @RequestMapping("/get/{cardId}")
-    public Card getCatalog(@PathVariable("cardId") String cardId) {
-        return new Card(CardType.BLACK, cardId);
+    @GetMapping("/getAll")
+    public List<Card> getCards() {
+        return cardRepository.findAll();
+    }
+
+    @CrossOrigin
+    @GetMapping("/get")
+    public Card getCard(@RequestParam("cardId") long cardId) {
+        var card = cardRepository.findById(cardId);
+
+        return card.orElseGet(Card::new);
+    }
+
+    @CrossOrigin
+    @PostMapping("/add")
+    public Card addCard(@Valid @RequestBody Card card) {
+        return cardRepository.save(card);
     }
 }
