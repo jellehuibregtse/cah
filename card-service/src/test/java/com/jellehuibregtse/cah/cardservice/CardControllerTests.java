@@ -8,7 +8,6 @@ import com.jellehuibregtse.cah.cardservice.models.CardType;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -44,21 +43,21 @@ class CardControllerTests {
     public void getCardsTest() throws Exception {
         this.mvc.perform(get(BASE_URL + "/getAll"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"id\":1,\"cardType\":\"WHITE\",\"cardText\":\"Card text\"},{\"id\":2,\"cardType\":\"BLACK\",\"cardText\":\"Card text\"}]"));
+                .andExpect(content().json("[{\"id\":1,\"cardType\":\"BLACK\",\"cardText\":\"card-text-for-testing\"},{\"id\":2,\"cardType\":\"WHITE\",\"cardText\":\"card-text-for-testing\"}]"));
     }
 
     @Test
     public void getCardTest() throws Exception {
         this.mvc.perform(get(BASE_URL + "/get?cardId=1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":1,\"cardType\":\"WHITE\",\"cardText\":\"card-text-for-testing\"}"));
+                .andExpect(content().json("{\"id\":1,\"cardType\":\"BLACK\",\"cardText\":\"card-text-for-testing\"}"));
     }
 
     @Test
     public void getNonExistentCardTest() throws Exception {
         this.mvc.perform(get(BASE_URL + "/get?cardId=-1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":0,\"cardType\":\"BLACK\",\"cardText\":\"foo\"}"));
+                .andExpect(content().json("{\"id\":0,\"cardType\":null,\"cardText\":null}"));
     }
 
     // https://stackoverflow.com/questions/20504399/testing-springs-requestbody-using-spring-mockmvc
