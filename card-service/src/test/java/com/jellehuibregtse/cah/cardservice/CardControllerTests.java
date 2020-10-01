@@ -40,19 +40,7 @@ class CardControllerTests {
     @Autowired
     private MockMvc mvc;
 
-//    @Test
-//    void getCard() throws Exception {
-//        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/card/get/foo");
-//        MvcResult result = mvc.perform(requestBuilder).andReturn();
-//        System.out.println(result.getResponse());
-//        assertEquals("{\"id\":0,\"cardType\":\"BLACK\",\"cardText\":\"foo\"}", result.getResponse().getContentAsString());
-//    }
-
     @Test
-<<<<<<< Updated upstream
-    public void getCard() throws Exception {
-        this.mvc.perform(MockMvcRequestBuilders.get("/card/get/foo"))
-=======
     public void getCardsTest() throws Exception {
         this.mvc.perform(get(BASE_URL + "/getAll"))
                 .andExpect(status().isOk())
@@ -69,7 +57,6 @@ class CardControllerTests {
     @Test
     public void getNonExistentCardTest() throws Exception {
         this.mvc.perform(get(BASE_URL + "/get?cardId=-1"))
->>>>>>> Stashed changes
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"id\":0,\"cardType\":\"BLACK\",\"cardText\":\"foo\"}"));
     }
