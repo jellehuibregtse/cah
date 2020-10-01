@@ -20,19 +20,11 @@ class CardControllerTests {
     @Autowired
     private MockMvc mvc;
 
-//    @Test
-//    void getCard() throws Exception {
-//        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/card/get/foo");
-//        MvcResult result = mvc.perform(requestBuilder).andReturn();
-//        System.out.println(result.getResponse());
-//        assertEquals("{\"id\":0,\"cardType\":\"BLACK\",\"cardText\":\"foo\"}", result.getResponse().getContentAsString());
-//    }
-
     @Test
     public void getCard() throws Exception {
-        this.mvc.perform(MockMvcRequestBuilders.get("/card/get/foo"))
+        this.mvc.perform(MockMvcRequestBuilders.get("/card/get?cardId=0"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":0,\"cardType\":\"BLACK\",\"cardText\":\"foo\"}"));
+                .andExpect(content().json("{\"id\":0,\"cardType\":null,\"cardText\":null}"));
     }
 
 }
