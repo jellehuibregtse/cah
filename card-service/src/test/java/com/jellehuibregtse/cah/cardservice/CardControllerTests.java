@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,12 +29,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:beforeTestRun.sql")
-@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:afterTestRun.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql-scripts/beforeTestRun.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql-scripts/afterTestRun.sql")
 @Transactional
 class CardControllerTests {
 
-    private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+    private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
+                                                                         MediaType.APPLICATION_JSON.getSubtype(),
+                                                                         StandardCharsets.UTF_8);
     private static final String BASE_URL = "/card";
 
     @Autowired
@@ -43,7 +46,8 @@ class CardControllerTests {
     public void getCardsTest() throws Exception {
         this.mvc.perform(get(BASE_URL + "/getAll"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"id\":1,\"cardType\":\"BLACK\",\"cardText\":\"card-text-for-testing\"},{\"id\":2,\"cardType\":\"WHITE\",\"cardText\":\"card-text-for-testing\"}]"));
+                .andExpect(content().json("[{\"id\":1,\"cardType\":\"BLACK\",\"cardText\":\"card-text-for-testing\"}," +
+                                                  "{\"id\":2,\"cardType\":\"WHITE\",\"cardText\":\"card-text-for-testing\"}]"));
     }
 
     @Test
@@ -73,15 +77,12 @@ class CardControllerTests {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(card);
 
-        this.mvc.perform(post(url).contentType(APPLICATION_JSON_UTF8)
-                .content(requestJson))
-                .andExpect(status().isOk());
+        this.mvc.perform(post(url).contentType(APPLICATION_JSON_UTF8).content(requestJson)).andExpect(status().isOk());
     }
 
     @Test
     public void addCardEmptyPostRequestTest() throws Exception {
         String url = BASE_URL + "/add";
-        this.mvc.perform(post(url).contentType(APPLICATION_JSON_UTF8))
-                .andExpect(status().isBadRequest());
+        this.mvc.perform(post(url).contentType(APPLICATION_JSON_UTF8)).andExpect(status().isBadRequest());
     }
 }
