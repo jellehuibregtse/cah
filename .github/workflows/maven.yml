@@ -10,7 +10,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-order-service:
+  Card-service:
 
     runs-on: ubuntu-latest
 
@@ -23,3 +23,6 @@ jobs:
     - name: Build with Maven
       working-directory: ./card-service
       run: mvn -B package --file pom.xml
+    - name: Test with Maven
+      working-directory: ./card-service
+      run: mvn test
