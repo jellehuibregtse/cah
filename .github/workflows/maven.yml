@@ -21,5 +21,5 @@ jobs:
       with:
         java-version: 11
     - name: Build with Maven
-      working-directory: ./cah/card-service
+      working-directory: ./card-service
       run: mvn -B package --file pom.xml
