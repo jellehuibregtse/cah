@@ -1,16 +1,17 @@
 package com.jellehuibregtse.cah.cardservice.models;
 
 public enum CardType {
-    BLACK {
-        @Override
-        public String toString() {
-            return "Black Card";
-        }
-    },
-    WHITE {
-        @Override
-        public String toString() {
-            return "White Card";
-        }
+    
+    BLACK("Black card"), WHITE("White card");
+
+    private final String text;
+
+    CardType(String text) {
+        this.text = text;
+    }
+
+    @Override
+    public String toString() {
+        return text;
     }
 }
