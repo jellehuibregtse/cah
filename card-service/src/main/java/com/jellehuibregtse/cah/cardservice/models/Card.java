@@ -1,12 +1,15 @@
 package com.jellehuibregtse.cah.cardservice.models;
 
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "cards")
 public class Card {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -17,8 +20,7 @@ public class Card {
     @NotNull
     private String cardText;
 
-    public Card() {
-    }
+    public Card() {}
 
     public Card(@NotNull CardType cardType, @NotNull String cardText) {
         this.cardType = cardType;
