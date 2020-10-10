@@ -1,7 +1,7 @@
 package com.jellehuibregtse.cah.cardservice.models;
 
 public enum CardType {
-    
+
     BLACK("Black card"), WHITE("White card");
 
     private final String text;
