@@ -40,7 +40,7 @@ public class CardController {
         cardRepository.save(card);
 
         return ResponseEntity.ok(String.format("A %s card with the text %s has been successfully created.",
-                                               card.getCardText(),
+                                               card.getCardType(),
                                                card.getCardText()));
     }
 
