@@ -16,7 +16,7 @@ import java.util.Collection;
 
 @DataJpaTest
 @ActiveProfiles("tests")
-public class RepositoryTests {
+public class CardRepositoryTests {
 
     @Autowired
     private CardRepository cardRepository;
@@ -33,7 +33,7 @@ public class RepositoryTests {
 
     @Test
     public void amountOfCardsInDatabase() {
-        Assert.assertEquals(2, cardRepository.findAll().size());
+        Assert.assertEquals(2, Lists.newArrayList(cardRepository.findAll()).size());
     }
 
     @Test
