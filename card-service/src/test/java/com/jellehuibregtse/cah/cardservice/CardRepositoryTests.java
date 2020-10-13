@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Collection;
 
 @DataJpaTest
-@ActiveProfiles("tests")
+@ActiveProfiles("test")
 public class CardRepositoryTests {
 
     @Autowired
