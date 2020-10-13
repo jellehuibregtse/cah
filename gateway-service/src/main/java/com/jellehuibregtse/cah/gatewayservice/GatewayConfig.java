@@ -19,7 +19,7 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 public class GatewayConfig {
 
     @Bean
-    public RouteLocator dmaRoutes(RouteLocatorBuilder builder) {
+    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes().route(p -> p.path("/api/cards/**").uri("lb://card-service")).build();
     }
 
