@@ -1,88 +1,100 @@
 package com.jellehuibregtse.cah.cardservice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jellehuibregtse.cah.cardservice.models.Card;
 import com.jellehuibregtse.cah.cardservice.models.CardType;
+import com.jellehuibregtse.cah.cardservice.repositories.CardRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
+import static org.hamcrest.Matchers.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:sql-scripts/beforeTestRun.sql")
-@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:sql-scripts/afterTestRun.sql")
-@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CardControllerTests {
-
-    private static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
-                                                                         MediaType.APPLICATION_JSON.getSubtype(),
-                                                                         StandardCharsets.UTF_8);
-    private static final String BASE_URL = "/card";
 
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private CardRepository cardRepository;
+
+    @BeforeEach
+    public void setup() {
+        var cardOne = new Card(CardType.WHITE, "Text on the white test card.");
+        var cardTwo = new Card(CardType.BLACK, "Text on the black test card.");
+
+        cardRepository.saveAll(Arrays.asList(cardOne, cardTwo));
+    }
+
     @Test
-    public void getCardsTest() throws Exception {
-        this.mvc.perform(get(BASE_URL + "/getAll"))
+    public void getAllCards_returnsStatus200_andAllCards() throws Exception {
+        this.mvc.perform(get("/cards"))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"id\":1,\"cardType\":\"BLACK\",\"cardText\":\"card-text-for-testing\"}," +
-                                                  "{\"id\":2,\"cardType\":\"WHITE\",\"cardText\":\"card-text-for-testing\"}]"));
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
+
+                .andExpect(jsonPath("$", hasSize(2)))
+
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].cardType", is("WHITE")))
+                .andExpect(jsonPath("$[0].cardText", is("Text on the white test card.")))
+
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].cardType", is("BLACK")))
+                .andExpect(jsonPath("$[1].cardText", is("Text on the black test card.")));
     }
 
     @Test
-    public void getCardTest() throws Exception {
-        this.mvc.perform(get(BASE_URL + "/get?cardId=1"))
+    public void getCard_returnsStatus200_andCard() throws Exception {
+        this.mvc.perform(get("/cards/1"))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":1,\"cardType\":\"BLACK\",\"cardText\":\"card-text-for-testing\"}"));
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.cardType", is("WHITE")))
+                .andExpect(jsonPath("$.cardText", is("Text on the white test card.")));
     }
 
     @Test
-    public void getNonExistentCardTest() throws Exception {
-        this.mvc.perform(get(BASE_URL + "/get?cardId=-1"))
+    public void getNonExistentCard_returnsStatus404() throws Exception {
+        this.mvc.perform(get("/cards/-1")).andDo(print()).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void addCard_returnsStatus200_andMessage() throws Exception {
+        Card card = new Card(CardType.WHITE, "Text on another white test card");
+
+        this.mvc.perform(post("/cards").contentType(APPLICATION_JSON).content(toJsonString(card)))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\"id\":0,\"cardType\":null,\"cardText\":null}"));
-    }
-
-    // https://stackoverflow.com/questions/20504399/testing-springs-requestbody-using-spring-mockmvc
-    @Test
-    public void addValidCardTest() throws Exception {
-        String url = BASE_URL + "/add";
-        Card card = new Card();
-        card.setCardType(CardType.WHITE);
-        card.setCardText("Card text");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
-        String requestJson = objectWriter.writeValueAsString(card);
-
-        this.mvc.perform(post(url).contentType(APPLICATION_JSON_UTF8).content(requestJson)).andExpect(status().isOk());
+                .andExpect(content().string(endsWith("has been successfully created.")));
     }
 
     @Test
-    public void addCardEmptyPostRequestTest() throws Exception {
-        String url = BASE_URL + "/add";
-        this.mvc.perform(post(url).contentType(APPLICATION_JSON_UTF8)).andExpect(status().isBadRequest());
+    public void addCardWithEmptyBody_returnsStatus400() throws Exception {
+        this.mvc.perform(post("/cards").contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    private String toJsonString(Object object) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(object);
     }
 }
