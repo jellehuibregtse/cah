@@ -17,5 +17,5 @@ public interface ICardService {
 
     ResponseEntity<String> updateCard(Card updatedCard, long id);
 
-    void deleteCard();
+    ResponseEntity<String> deleteCard(long id);
 }

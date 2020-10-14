@@ -57,7 +57,10 @@ public class CardService implements ICardService {
     }
 
     @Override
-    public void deleteCard() {
+    public ResponseEntity<String> deleteCard(long id) {
+        cardRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("Card with id %s not found.", id)));
+        cardRepository.deleteById(id);
 
+        return ResponseEntity.ok(String.format("Card with id %s has been successfully deleted.", id));
     }
 }

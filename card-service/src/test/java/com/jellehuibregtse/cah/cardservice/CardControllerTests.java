@@ -132,6 +132,21 @@ class CardControllerTests {
                 .andExpect(jsonPath("$.cardText", is("Text on the black test card.")));
     }
 
+    @Test
+    public void deleteCard_returnsStatus200_andMessage() throws Exception {
+        this.mvc.perform(delete("/cards/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(endsWith("has been successfully deleted.")));
+    }
+
+    @Test
+    public void deleteNonExistentCard_returnsStatus404() throws Exception {
+        this.mvc.perform(delete("/cards/-1"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
     private String toJsonString(Object object) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(object);
     }
