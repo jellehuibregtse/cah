@@ -18,9 +18,4 @@ public class CardServiceApplicationTests {
     public void contextLoads() {
         Assert.assertNotNull(cardController);
     }
-
-    @Test
-    public void mainMethod() {
-        CardServiceApplication.main(new String[0]);
-    }
 }
