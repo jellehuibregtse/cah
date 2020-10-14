@@ -63,12 +63,12 @@ class CardControllerTests {
     }
 
     @Test
-    public void getCard_returnsStatus200_andCard(int id) throws Exception {
-        this.mvc.perform(get("/cards/" + id))
+    public void getCard_returnsStatus200_andCard() throws Exception {
+        this.mvc.perform(get("/cards/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(id)))
+                .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.cardType", is("WHITE")))
                 .andExpect(jsonPath("$.cardText", is("Text on the white test card.")));
     }
