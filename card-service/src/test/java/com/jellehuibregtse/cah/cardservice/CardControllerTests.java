@@ -2,9 +2,9 @@ package com.jellehuibregtse.cah.cardservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jellehuibregtse.cah.cardservice.models.Card;
-import com.jellehuibregtse.cah.cardservice.models.CardType;
-import com.jellehuibregtse.cah.cardservice.repositories.CardRepository;
+import com.jellehuibregtse.cah.cardservice.model.Card;
+import com.jellehuibregtse.cah.cardservice.model.CardType;
+import com.jellehuibregtse.cah.cardservice.repository.CardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

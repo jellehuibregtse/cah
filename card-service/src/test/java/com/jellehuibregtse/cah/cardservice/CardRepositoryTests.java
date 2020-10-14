@@ -1,9 +1,9 @@
 package com.jellehuibregtse.cah.cardservice;
 
 import com.google.common.collect.Lists;
-import com.jellehuibregtse.cah.cardservice.models.Card;
-import com.jellehuibregtse.cah.cardservice.models.CardType;
-import com.jellehuibregtse.cah.cardservice.repositories.CardRepository;
+import com.jellehuibregtse.cah.cardservice.model.Card;
+import com.jellehuibregtse.cah.cardservice.model.CardType;
+import com.jellehuibregtse.cah.cardservice.repository.CardRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.jellehuibregtse.cah.cardservice.models;
+package com.jellehuibregtse.cah.cardservice.model;
 
 public enum CardType {
 

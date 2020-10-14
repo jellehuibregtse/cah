@@ -1,6 +1,6 @@
-package com.jellehuibregtse.cah.cardservice.repositories;
+package com.jellehuibregtse.cah.cardservice.repository;
 
-import com.jellehuibregtse.cah.cardservice.models.Card;
+import com.jellehuibregtse.cah.cardservice.model.Card;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

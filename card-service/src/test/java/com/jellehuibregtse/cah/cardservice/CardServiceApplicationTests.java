@@ -1,6 +1,6 @@
 package com.jellehuibregtse.cah.cardservice;
 
-import com.jellehuibregtse.cah.cardservice.controllers.CardController;
+import com.jellehuibregtse.cah.cardservice.controller.CardController;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
