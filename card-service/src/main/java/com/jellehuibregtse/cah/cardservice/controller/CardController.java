@@ -1,7 +1,6 @@
 package com.jellehuibregtse.cah.cardservice.controller;
 
 import com.jellehuibregtse.cah.cardservice.model.Card;
-import com.jellehuibregtse.cah.cardservice.repository.CardRepository;
 import com.jellehuibregtse.cah.cardservice.service.ICardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

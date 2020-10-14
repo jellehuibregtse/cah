@@ -107,7 +107,7 @@ class CardControllerTests {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1,2})
+    @ValueSource(ints = {1, 2})
     public void updatedCardWithEmptyBody_returnsStatus400(int id) throws Exception {
         this.mvc.perform(put("/cards/" + id).contentType(APPLICATION_JSON))
                 .andDo(print())
