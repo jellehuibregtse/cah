@@ -8,6 +8,8 @@ import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -54,11 +56,12 @@ public class CardRepositoryTests {
         Assert.assertEquals("This is text on the white card.", cardTwo.getCardText());
     }
 
-    @Test
-    public void getNonExistentCardFromDatabase_returnsEmptyOptional() {
-        var cardThree = cardRepository.findById(3L);
+    @ParameterizedTest
+    @ValueSource(longs = {3, Long.MIN_VALUE, Long.MAX_VALUE})
+    public void getNonExistentCardFromDatabase_returnsEmptyOptional(long id) {
+        var card = cardRepository.findById(id);
 
-        Assert.assertFalse(cardThree.isPresent());
+        Assert.assertFalse(card.isPresent());
     }
 
     @Test
