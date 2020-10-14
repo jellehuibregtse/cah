@@ -2,10 +2,8 @@ package com.jellehuibregtse.cah.cardservice.controller;
 
 import com.jellehuibregtse.cah.cardservice.model.Card;
 import com.jellehuibregtse.cah.cardservice.repository.CardRepository;
-import com.jellehuibregtse.cah.cardservice.service.CardService;
 import com.jellehuibregtse.cah.cardservice.service.ICardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,16 +40,7 @@ public class CardController {
 
     @PutMapping("{id}")
     public ResponseEntity<String> updateCard(@RequestBody Card updatedCard, @PathVariable long id) {
-        cardRepository.findById(id).map(card -> {
-            card.setCardText(updatedCard.getCardText());
-            card.setCardType(updatedCard.getCardType());
-            return cardRepository.save(card);
-        }).orElseThrow(() -> new ResourceNotFoundException(String.format("Card with id %s not found.", id)));
-
-        return ResponseEntity.ok(String.format("Card %s with the text %s and type %s has been successfully updated.",
-                                               id,
-                                               updatedCard.getCardText(),
-                                               updatedCard.getCardText()));
+        return cardService.updateCard(updatedCard, id);
     }
 
     @DeleteMapping("{id}")
