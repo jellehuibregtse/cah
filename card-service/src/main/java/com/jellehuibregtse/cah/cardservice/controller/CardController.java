@@ -9,17 +9,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/cards")
 public class CardController {
 
-    private final CardRepository cardRepository;
     private final ICardService cardService;
 
     @Autowired
-    public CardController(CardRepository cardRepository, ICardService cardService) {
-        this.cardRepository = cardRepository;
+    public CardController(ICardService cardService) {
         this.cardService = cardService;
     }
 
