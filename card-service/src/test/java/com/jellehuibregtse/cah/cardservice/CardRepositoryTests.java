@@ -5,6 +5,7 @@ import com.jellehuibregtse.cah.cardservice.model.Card;
 import com.jellehuibregtse.cah.cardservice.model.CardType;
 import com.jellehuibregtse.cah.cardservice.repository.CardRepository;
 import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,47 +32,49 @@ public class CardRepositoryTests {
         persistAll(Lists.newArrayList(blackCard, whiteCard));
     }
 
+    @AfterEach
+    public void cleanup() {
+        entityManager.clear();
+    }
+
     @Test
-    public void amountOfCardsInDatabase() {
+    public void getAmountOfCardsInDatabase_isTwo() {
         Assert.assertEquals(2, Lists.newArrayList(cardRepository.findAll()).size());
     }
 
     @Test
-    public void oneOfEachCardInDatabase() {
-        var cardOne = cardRepository.findById(1L);
-        var cardTwo = cardRepository.findById(2L);
+    public void getTwoCardsFromDatabase_returnsBothCards() {
+        var cards = Lists.newArrayList(cardRepository.findAll());
+        var cardOne = cards.get(0);
+        var cardTwo = cards.get(1);
 
-        Assert.assertTrue(cardOne.isPresent());
-        Assert.assertTrue(cardTwo.isPresent());
-        Assert.assertEquals(CardType.BLACK, cardOne.get().getCardType());
-        Assert.assertEquals(CardType.WHITE, cardTwo.get().getCardType());
-        Assert.assertEquals("This is text on the black card.", cardOne.get().getCardText());
-        Assert.assertEquals("This is text on the white card.", cardTwo.get().getCardText());
+        Assert.assertEquals(CardType.BLACK, cardOne.getCardType());
+        Assert.assertEquals(CardType.WHITE, cardTwo.getCardType());
+        Assert.assertEquals("This is text on the black card.", cardOne.getCardText());
+        Assert.assertEquals("This is text on the white card.", cardTwo.getCardText());
     }
 
     @Test
-    public void cardWithIdThreeDoesNotExistInDatabase() {
+    public void getNonExistentCardFromDatabase_returnsEmptyOptional() {
         var cardThree = cardRepository.findById(3L);
 
         Assert.assertFalse(cardThree.isPresent());
     }
 
     @Test
-    public void cardWithNegativeIdDoesNotExistInDatabase() {
+    public void getNonExistentCardNegativeFromDatabase_returnsEmptyOptional() {
         var cardMinusOne = cardRepository.findById(-1L);
 
         Assert.assertFalse(cardMinusOne.isPresent());
     }
 
     @Test
-    public void addingCardDoesReturnFromDatabase() {
+    public void addCardToDatabase_canRetrieveThatCardFromDatabase() {
         var card = new Card(CardType.WHITE, "Another card with text.");
 
         cardRepository.save(card);
         var cardFromDatabase = cardRepository.findById(card.getId());
         Assert.assertTrue(cardFromDatabase.isPresent());
-        Assert.assertEquals(CardType.WHITE, cardFromDatabase.get().getCardType());
-        Assert.assertEquals("Another card with text.", cardFromDatabase.get().getCardText());
         Assert.assertEquals(card, cardFromDatabase.get());
     }
 
