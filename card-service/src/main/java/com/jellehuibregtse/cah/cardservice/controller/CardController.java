@@ -1,8 +1,9 @@
 package com.jellehuibregtse.cah.cardservice.controller;
 
-import com.google.common.collect.Lists;
 import com.jellehuibregtse.cah.cardservice.model.Card;
 import com.jellehuibregtse.cah.cardservice.repository.CardRepository;
+import com.jellehuibregtse.cah.cardservice.service.CardService;
+import com.jellehuibregtse.cah.cardservice.service.ICardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -16,32 +17,27 @@ import java.util.List;
 public class CardController {
 
     private final CardRepository cardRepository;
+    private final ICardService cardService;
 
     @Autowired
-    public CardController(CardRepository cardRepository) {
+    public CardController(CardRepository cardRepository, ICardService cardService) {
         this.cardRepository = cardRepository;
+        this.cardService = cardService;
     }
 
     @GetMapping
     public ResponseEntity<List<Card>> getCards() {
-        return ResponseEntity.ok(Lists.newArrayList(cardRepository.findAll()));
+        return cardService.findAllCards();
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Card> getCard(@PathVariable long id) {
-        return ResponseEntity.ok(cardRepository.findById(id)
-                                               .orElseThrow(() -> new ResourceNotFoundException(String.format(
-                                                       "Card with id %s not found.",
-                                                       id))));
+        return cardService.findCard(id);
     }
 
     @PostMapping
     public ResponseEntity<String> createCard(@RequestBody Card card) {
-        cardRepository.save(card);
-
-        return ResponseEntity.ok(String.format("A %s card with the text %s has been successfully created.",
-                                               card.getCardType(),
-                                               card.getCardText()));
+        return cardService.addCard(card);
     }
 
     @PutMapping("{id}")

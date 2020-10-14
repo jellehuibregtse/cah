@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jellehuibregtse.cah.cardservice.model.Card;
 import com.jellehuibregtse.cah.cardservice.model.CardType;
-import com.jellehuibregtse.cah.cardservice.repository.CardRepository;
+import com.jellehuibregtse.cah.cardservice.service.ICardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +33,14 @@ class CardControllerTests {
     private MockMvc mvc;
 
     @Autowired
-    private CardRepository cardRepository;
+    private ICardService cardService;
 
     @BeforeEach
     public void setup() {
         var cardOne = new Card(CardType.WHITE, "Text on the white test card.");
         var cardTwo = new Card(CardType.BLACK, "Text on the black test card.");
 
-        cardRepository.saveAll(Arrays.asList(cardOne, cardTwo));
+        saveAll(Arrays.asList(cardOne, cardTwo));
     }
 
     @Test
@@ -96,5 +96,11 @@ class CardControllerTests {
 
     private String toJsonString(Object object) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(object);
+    }
+
+    private void saveAll(Iterable<Card> cards) {
+        for (var card : cards) {
+            cardService.addCard(card);
+        }
     }
 }
