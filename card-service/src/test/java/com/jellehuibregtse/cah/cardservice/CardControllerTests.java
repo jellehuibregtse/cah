@@ -7,6 +7,8 @@ import com.jellehuibregtse.cah.cardservice.model.CardType;
 import com.jellehuibregtse.cah.cardservice.service.ICardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -61,19 +63,20 @@ class CardControllerTests {
     }
 
     @Test
-    public void getCard_returnsStatus200_andCard() throws Exception {
-        this.mvc.perform(get("/cards/1"))
+    public void getCard_returnsStatus200_andCard(int id) throws Exception {
+        this.mvc.perform(get("/cards/" + id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.id", is(id)))
                 .andExpect(jsonPath("$.cardType", is("WHITE")))
                 .andExpect(jsonPath("$.cardText", is("Text on the white test card.")));
     }
 
-    @Test
-    public void getNonExistentCard_returnsStatus404() throws Exception {
-        this.mvc.perform(get("/cards/-1")).andDo(print()).andExpect(status().isNotFound());
+    @ParameterizedTest
+    @ValueSource(ints = {Integer.MIN_VALUE, -1, 10, Integer.MAX_VALUE})
+    public void getNonExistentCard_returnsStatus404(int id) throws Exception {
+        this.mvc.perform(get("/cards/" + id)).andDo(print()).andExpect(status().isNotFound());
     }
 
     @Test
@@ -93,58 +96,62 @@ class CardControllerTests {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    public void updateNonExistentCard_returnsStatus404() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = {Integer.MIN_VALUE, -1, 10, Integer.MAX_VALUE})
+    public void updateNonExistentCard_returnsStatus404(int id) throws Exception {
         var card = new Card(CardType.WHITE, "Text on another white test card");
 
-        this.mvc.perform(put("/cards/-1").contentType(APPLICATION_JSON).content(toJsonString(card)))
+        this.mvc.perform(put("/cards/" + id).contentType(APPLICATION_JSON).content(toJsonString(card)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    public void updatedCardWithEmptyBody_returnsStatus400() throws Exception {
-        this.mvc.perform(put("/cards/1").contentType(APPLICATION_JSON))
+    @ParameterizedTest
+    @ValueSource(ints = {1,2})
+    public void updatedCardWithEmptyBody_returnsStatus400(int id) throws Exception {
+        this.mvc.perform(put("/cards/" + id).contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    public void updateCard_returnsStatus200_andMessage() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2})
+    public void updateCard_returnsStatus200_andMessage(int id) throws Exception {
         var updatedCardOne = new Card(CardType.BLACK, "Text on the black test card.");
 
-        this.mvc.perform(put("/cards/1").contentType(APPLICATION_JSON).content(toJsonString(updatedCardOne)))
+        this.mvc.perform(put("/cards/" + id).contentType(APPLICATION_JSON).content(toJsonString(updatedCardOne)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(endsWith("has been successfully updated.")));
     }
 
-    @Test
-    public void getUpdatedCard_returnsStatus200_andUpdatedCard() throws Exception {
-        updateCard_returnsStatus200_andMessage();
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2})
+    public void getUpdatedCard_returnsStatus200_andUpdatedCard(int id) throws Exception {
+        updateCard_returnsStatus200_andMessage(id);
 
-        this.mvc.perform(get("/cards/1"))
+        this.mvc.perform(get("/cards/" + id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.id", is(id)))
                 .andExpect(jsonPath("$.cardType", is("BLACK")))
                 .andExpect(jsonPath("$.cardText", is("Text on the black test card.")));
     }
 
-    @Test
-    public void deleteCard_returnsStatus200_andMessage() throws Exception {
-        this.mvc.perform(delete("/cards/1"))
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2})
+    public void deleteCard_returnsStatus200_andMessage(int id) throws Exception {
+        this.mvc.perform(delete("/cards/" + id))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(endsWith("has been successfully deleted.")));
     }
 
-    @Test
-    public void deleteNonExistentCard_returnsStatus404() throws Exception {
-        this.mvc.perform(delete("/cards/-1"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+    @ParameterizedTest
+    @ValueSource(ints = {Integer.MIN_VALUE, -1, 10, Integer.MAX_VALUE})
+    public void deleteNonExistentCard_returnsStatus404(int id) throws Exception {
+        this.mvc.perform(delete("/cards/" + id)).andDo(print()).andExpect(status().isNotFound());
     }
 
     private String toJsonString(Object object) throws JsonProcessingException {
