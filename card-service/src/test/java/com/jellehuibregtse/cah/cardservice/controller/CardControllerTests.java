@@ -1,4 +1,4 @@
-package com.jellehuibregtse.cah.cardservice;
+package com.jellehuibregtse.cah.cardservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class CardControllerTests {
+public class CardControllerTests {
 
     @Autowired
     private MockMvc mvc;
