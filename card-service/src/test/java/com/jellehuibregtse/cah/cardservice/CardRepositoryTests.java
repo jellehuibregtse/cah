@@ -78,6 +78,13 @@ public class CardRepositoryTests {
         Assert.assertEquals(card, cardFromDatabase.get());
     }
 
+    @Test
+    public void removeAllCardsFromDatabase_amountOfCardsInDatabase_IsZero() {
+        cardRepository.deleteAll();
+
+        Assert.assertEquals(0, Lists.newArrayList(cardRepository.findAll()).size());
+    }
+
     private void persistAll(Collection<?> entities) {
         for (var entity : entities) {
             entityManager.persist(entity);
