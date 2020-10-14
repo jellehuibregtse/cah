@@ -1,14 +1,16 @@
 import React from "react";
 import "./App.css";
-import NavBar from "./components/navbar";
-import Card from "./components/card";
+import NavBar from "./components/NavBar";
+import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 
 function App() {
     return (
-        <React.Fragment>
-            <NavBar/>
-            <Card/>
-        </React.Fragment>
+        <Router>
+            <Switch>
+                <NavBar/>
+                <Route path="*"><Redirect to="/"/></Route>
+            </Switch>
+        </Router>
     );
 }
 
