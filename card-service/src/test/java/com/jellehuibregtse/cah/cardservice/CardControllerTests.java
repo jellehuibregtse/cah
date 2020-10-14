@@ -18,8 +18,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -79,7 +78,7 @@ class CardControllerTests {
 
     @Test
     public void addCard_returnsStatus200_andMessage() throws Exception {
-        Card card = new Card(CardType.WHITE, "Text on another white test card");
+        var card = new Card(CardType.WHITE, "Text on another white test card");
 
         this.mvc.perform(post("/cards").contentType(APPLICATION_JSON).content(toJsonString(card)))
                 .andDo(print())
@@ -92,6 +91,45 @@ class CardControllerTests {
         this.mvc.perform(post("/cards").contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateNonExistentCard_returnsStatus404() throws Exception {
+        var card = new Card(CardType.WHITE, "Text on another white test card");
+
+        this.mvc.perform(put("/cards/-1").contentType(APPLICATION_JSON).content(toJsonString(card)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void updatedCardWithEmptyBody_returnsStatus400() throws Exception {
+        this.mvc.perform(put("/cards/1").contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateCard_returnsStatus200_andMessage() throws Exception {
+        var updatedCardOne = new Card(CardType.BLACK, "Text on the black test card.");
+
+        this.mvc.perform(put("/cards/1").contentType(APPLICATION_JSON).content(toJsonString(updatedCardOne)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(endsWith("has been successfully updated.")));
+    }
+
+    @Test
+    public void getUpdatedCard_returnsStatus200_andUpdatedCard() throws Exception {
+        updateCard_returnsStatus200_andMessage();
+
+        this.mvc.perform(get("/cards/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.cardType", is("BLACK")))
+                .andExpect(jsonPath("$.cardText", is("Text on the black test card.")));
     }
 
     private String toJsonString(Object object) throws JsonProcessingException {
