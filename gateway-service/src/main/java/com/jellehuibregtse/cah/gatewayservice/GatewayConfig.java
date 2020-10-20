@@ -20,7 +20,10 @@ public class GatewayConfig {
 
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-        return builder.routes().route(p -> p.path("/api/cards/**").uri("lb://card-service")).build();
+        return builder.routes()
+                      .route(p -> p.path("/api/cards/**").uri("lb://card-service"))
+                      .route(p -> p.path("/api/auth/**").uri("lb://auth-service"))
+                      .build();
     }
 
     @Bean
