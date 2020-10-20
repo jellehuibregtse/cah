@@ -1,7 +1,6 @@
 package com.jellehuibregtse.cah.gatewayservice.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -51,10 +50,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // Any other request must be authenticated.
             .anyRequest()
             .authenticated();
-    }
-
-    @Bean
-    public JwtConfig jwtConfig() {
-        return new JwtConfig();
     }
 }

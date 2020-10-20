@@ -1,12 +1,14 @@
 package com.jellehuibregtse.cah.gatewayservice.security;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * The JwtConfig which reads from the application properties.
  *
  * @author Jelle Huibregtse
  */
+@Configuration
 public class JwtConfig {
 
     @Value("${security.jwt.uri:/auth/**}")
