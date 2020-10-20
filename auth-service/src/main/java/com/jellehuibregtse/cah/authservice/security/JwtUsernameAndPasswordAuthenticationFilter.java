@@ -20,12 +20,16 @@ import java.sql.Date;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * This filter authenticates a user with username and password then returns a JWT token.
+ *
+ * @author Jelle Huibregtse
+ */
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    private final JwtConfig jwtConfig;
     // We use auth manager to validate the user credentials
     private AuthenticationManager authManager;
-
-    private final JwtConfig jwtConfig;
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager, JwtConfig jwtConfig) {
         this.authManager = authManager;

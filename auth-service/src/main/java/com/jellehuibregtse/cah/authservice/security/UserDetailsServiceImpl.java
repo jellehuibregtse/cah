@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 
-@Service   // It has to be annotated with @Service.
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired

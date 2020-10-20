@@ -14,11 +14,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.http.HttpServletResponse;
 
-@EnableWebSecurity    // Enable security config. This annotation denotes config for spring security.
+/**
+ * The security configuration for the authentication service.
+ *
+ * @author Jelle Huibregtse
+ */
+@EnableWebSecurity
 public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
 
-	@Qualifier("userDetailsServiceImpl")
-	@Autowired
+    @Qualifier("userDetailsServiceImpl")
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
