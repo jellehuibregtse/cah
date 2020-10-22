@@ -1,38 +1,46 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import Card from "./Card";
 
 const CreateCard = () => {
 
+    const [text, setText] = useState("");
+    const [color, setColor] = useState("BLACK");
+
+    const updateText = event => {
+        setText(event.target.value);
+    }
+
+    const updateColor = event => {
+        setColor(event.target.value);
+    }
+
     return (
-        <form>
-            <div className="form-group">
-                <label htmlFor="exampleFormControlInput1">Email address</label>
-                <input type="email" className="form-control" id="exampleFormControlInput1"
-                       placeholder="name@example.com">
+        <div className="container mt-5">
+            <div className="row justify-content-center align-items-center">
+                <div className="col-8 m-auto">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="cardText">Card Text</label>
+                            <textarea rows="8" className="form-control" id="cardText"
+                                   placeholder="The text on the card" value={text} onChange={updateText}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="cardColor">Card Color</label>
+                            <select className="form-control" id="cardColor"
+                                    value={color} onChange={updateColor}>
+                                <option>BLACK</option>
+                                <option>WHITE</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div className="col-2 m-auto">
+                    <Card cardType={color.toString()}
+                          cardText={text}/>
+                </div>
             </div>
-            <div className="form-group">
-                <label htmlFor="exampleFormControlSelect1">Example select</label>
-                <select className="form-control" id="exampleFormControlSelect1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-            <div className="form-group">
-                <label htmlFor="exampleFormControlSelect2">Example multiple select</label>
-                <select multiple className="form-control" id="exampleFormControlSelect2">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </div>
-            <div className="form-group">
-                <label htmlFor="exampleFormControlTextarea1">Example textarea</label>
-                <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-            </div>
-        </form>
+        </div>
     )
 }
+
+export default CreateCard;
