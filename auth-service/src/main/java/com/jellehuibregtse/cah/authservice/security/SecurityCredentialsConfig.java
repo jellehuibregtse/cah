@@ -3,9 +3,9 @@ package com.jellehuibregtse.cah.authservice.security;
 import com.jellehuibregtse.cah.authservice.jwt.JwtConfig;
 import com.jellehuibregtse.cah.authservice.jwt.JwtTokenAuthenticationFilter;
 import com.jellehuibregtse.cah.authservice.jwt.JwtUsernameAndPasswordAuthenticationFilter;
+import com.jellehuibregtse.cah.authservice.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -31,14 +31,17 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final JwtConfig jwtConfig;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenService jwtTokenService;
 
     @Autowired
     public SecurityCredentialsConfig(@Qualifier("applicationUserService") UserDetailsService userDetailsService,
                                      JwtConfig jwtConfig,
-                                     PasswordEncoder passwordEncoder) {
+                                     PasswordEncoder passwordEncoder,
+                                     JwtTokenService jwtTokenService) {
         this.userDetailsService = userDetailsService;
         this.jwtConfig = jwtConfig;
         this.passwordEncoder = passwordEncoder;
+        this.jwtTokenService = jwtTokenService;
     }
 
     @Override
@@ -57,7 +60,9 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
             // What's the authenticationManager()?
             // An object provided by WebSecurityConfigurerAdapter, used to authenticate the user passing user's credentials.
             // The filter needs this auth manager to authenticate the user.
-            .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig))
+            .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),
+                                                                      jwtConfig,
+                                                                      jwtTokenService))
             .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
             // Allow all POST requests, otherwise a user can't authenticate.

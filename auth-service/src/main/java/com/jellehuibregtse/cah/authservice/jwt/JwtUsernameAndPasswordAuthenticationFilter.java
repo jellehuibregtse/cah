@@ -1,8 +1,7 @@
 package com.jellehuibregtse.cah.authservice.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.jellehuibregtse.cah.authservice.service.JwtTokenService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -31,10 +28,14 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     private final JwtConfig jwtConfig;
     // We use auth manager to validate the user credentials.
     private final AuthenticationManager authManager;
+    private final JwtTokenService jwtTokenService;
 
-    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager, JwtConfig jwtConfig) {
+    public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager,
+                                                      JwtConfig jwtConfig,
+                                                      JwtTokenService jwtTokenService) {
         this.authManager = authManager;
         this.jwtConfig = jwtConfig;
+        this.jwtTokenService = jwtTokenService;
 
         // By default, UsernamePasswordAuthenticationFilter listens to "/login" path.
         // In our case, we use "/auth". So, we need to override the defaults.
@@ -69,28 +70,16 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                                             FilterChain chain,
                                             Authentication authentication) {
 
-        var token = generateToken(authentication);
+        // Converts the authorities to list of strings.
+        // This is important because it affects the way we get them back at the gateway.
+        var token = jwtTokenService.generateToken(authentication.getName(),
+                                                  authentication.getAuthorities()
+                                                                .stream()
+                                                                .map(GrantedAuthority::getAuthority)
+                                                                .collect(Collectors.toList()));
 
         // Add token to header.
         response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
-    }
-
-    private String generateToken(Authentication authentication) {
-        var now = System.currentTimeMillis();
-
-        return Jwts.builder()
-                   .setSubject(authentication.getName())
-                   // Convert to list of strings.
-                   // This is important because it affects the way we get them back at the gateway.
-                   .claim("authorities",
-                          authentication.getAuthorities()
-                                        .stream()
-                                        .map(GrantedAuthority::getAuthority)
-                                        .collect(Collectors.toList()))
-                   .setIssuedAt(new Date(now))
-                   .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getExpiration())))
-                   .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret().getBytes())
-                   .compact();
     }
 
     private static class AuthenticationRequest {
