@@ -1,4 +1,4 @@
-package com.jellehuibregtse.cah.authservice.security;
+package com.jellehuibregtse.cah.authservice.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;

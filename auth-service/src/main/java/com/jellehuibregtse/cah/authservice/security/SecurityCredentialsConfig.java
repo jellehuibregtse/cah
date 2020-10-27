@@ -1,8 +1,9 @@
 package com.jellehuibregtse.cah.authservice.security;
 
+import com.jellehuibregtse.cah.authservice.jwt.JwtConfig;
+import com.jellehuibregtse.cah.authservice.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,55 +23,50 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
 
-    @Qualifier("userDetailsServiceImpl")
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+    private final JwtConfig jwtConfig;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private JwtConfig jwtConfig;
+    public SecurityCredentialsConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
+                                     JwtConfig jwtConfig,
+                                     PasswordEncoder passwordEncoder) {
+        this.userDetailsService = userDetailsService;
+        this.jwtConfig = jwtConfig;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf()
             .disable()
-            // make sure we use stateless session; session won't be used to store user's state.
+            // Make sure we use a stateless session (a session that won't be used to store a user's state).
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            // handle an authorized attempts
+            // Handle an authorized attempts.
             .exceptionHandling()
             .authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
             .and()
-            // Add a filter to validate user credentials and add token in the response header
-
+            // Add a filter to validate user credentials and add token in the response header.
             // What's the authenticationManager()?
-            // An object provided by WebSecurityConfigurerAdapter, used to authenticate the user passing user's credentials
+            // An object provided by WebSecurityConfigurerAdapter, used to authenticate the user passing user's credentials.
             // The filter needs this auth manager to authenticate the user.
             .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig))
             .authorizeRequests()
-            // allow all POST requests
+            // Allow all POST requests, otherwise a user can't authenticate.
             .antMatchers(HttpMethod.POST, jwtConfig.getUri())
             .permitAll()
-            // any other requests must be authenticated
+            // Any other requests must be authenticated.
             .anyRequest()
             .authenticated();
     }
 
-    // Spring has UserDetailsService interface, which can be overriden to provide our implementation for fetching user from database (or any other source).
+    // Spring has UserDetailsService interface, which can be overridden to provide our implementation for fetching user from database (or any other source).
     // The UserDetailsService object is used by the auth manager to load the user from database.
     // In addition, we need to define the password encoder also. So, auth manager can compare and verify passwords.
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    public JwtConfig jwtConfig() {
-        return new JwtConfig();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 }

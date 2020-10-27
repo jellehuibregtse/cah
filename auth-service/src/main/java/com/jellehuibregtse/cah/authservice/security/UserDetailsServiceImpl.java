@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -16,15 +16,19 @@ import java.util.List;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    private BCryptPasswordEncoder encoder;
+    public UserDetailsServiceImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         // hard coding the users. All passwords must be encoded.
-        final List<AppUser> users = Arrays.asList(new AppUser(1, "omar", encoder.encode("12345"), "USER"),
-                                                  new AppUser(2, "admin", encoder.encode("12345"), "ADMIN"));
+        final List<AppUser> users = Arrays.asList(new AppUser(1, "omar", passwordEncoder.encode("12345"), "USER"),
+                                                  new AppUser(2, "admin", passwordEncoder.encode("12345"), "ADMIN"));
 
 
         for (AppUser appUser : users) {
