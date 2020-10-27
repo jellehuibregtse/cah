@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JwtConfig {
 
-    @Value("${security.jwt.uri:/auth-service/auth/**}")
+    @Value("${security.jwt.uri:/api/auth-service/auth/**}")
     private String uri;
 
     @Value("${security.jwt.header:Authorization}")

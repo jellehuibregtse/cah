@@ -1,17 +1,21 @@
 package com.jellehuibregtse.cah.authservice.security;
 
 import com.jellehuibregtse.cah.authservice.jwt.JwtConfig;
+import com.jellehuibregtse.cah.authservice.jwt.JwtTokenAuthenticationFilter;
 import com.jellehuibregtse.cah.authservice.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Jelle Huibregtse
  */
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
@@ -53,6 +58,7 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
             // An object provided by WebSecurityConfigurerAdapter, used to authenticate the user passing user's credentials.
             // The filter needs this auth manager to authenticate the user.
             .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig))
+            .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
             // Allow all POST requests, otherwise a user can't authenticate.
             .antMatchers(HttpMethod.POST, jwtConfig.getUri())
