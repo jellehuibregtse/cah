@@ -1,13 +1,23 @@
 package com.jellehuibregtse.cah.authservice.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
 /**
  * The application user model.
  *
  * @author Jelle Huibregtse
  */
+@Entity
 public class ApplicationUser {
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @NotNull
     private String username, password;
     private String role;
 
@@ -18,11 +28,13 @@ public class ApplicationUser {
         this.role = role;
     }
 
-    public Integer getId() {
+    public ApplicationUser() {}
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
