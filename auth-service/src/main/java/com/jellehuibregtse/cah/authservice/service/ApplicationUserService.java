@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The service that handles all user actions.
+ *
+ * @author Jelle Huibregtse
+ */
 @Service
 public class ApplicationUserService implements UserDetailsService {
 

@@ -5,6 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+/**
+ * The entry point for the application.
+ *
+ * @author Jelle Huibregtse
+ */
 @EnableJpaAuditing
 @EnableEurekaClient
 @SpringBootApplication
