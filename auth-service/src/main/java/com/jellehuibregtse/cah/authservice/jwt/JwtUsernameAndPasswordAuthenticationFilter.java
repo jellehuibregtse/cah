@@ -67,25 +67,30 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication auth) {
+                                            Authentication authentication) {
 
-        var now = System.currentTimeMillis();
-        var token = Jwts.builder()
-                        .setSubject(auth.getName())
-                        // Convert to list of strings.
-                        // This is important because it affects the way we get them back at the gateway.
-                        .claim("authorities",
-                               auth.getAuthorities()
-                                   .stream()
-                                   .map(GrantedAuthority::getAuthority)
-                                   .collect(Collectors.toList()))
-                        .setIssuedAt(new Date(now))
-                        .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getExpiration())))
-                        .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret().getBytes())
-                        .compact();
+        var token = generateToken(authentication);
 
         // Add token to header.
         response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
+    }
+
+    private String generateToken(Authentication authentication) {
+        var now = System.currentTimeMillis();
+
+        return Jwts.builder()
+                   .setSubject(authentication.getName())
+                   // Convert to list of strings.
+                   // This is important because it affects the way we get them back at the gateway.
+                   .claim("authorities",
+                          authentication.getAuthorities()
+                                        .stream()
+                                        .map(GrantedAuthority::getAuthority)
+                                        .collect(Collectors.toList()))
+                   .setIssuedAt(new Date(now))
+                   .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getExpiration())))
+                   .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret().getBytes())
+                   .compact();
     }
 
     private static class AuthenticationRequest {
