@@ -12,11 +12,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.HttpMethod;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -28,8 +29,8 @@ import java.util.stream.Collectors;
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final JwtConfig jwtConfig;
-    // We use auth manager to validate the user credentials
-    private AuthenticationManager authManager;
+    // We use auth manager to validate the user credentials.
+    private final AuthenticationManager authManager;
 
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager, JwtConfig jwtConfig) {
         this.authManager = authManager;
@@ -37,24 +38,22 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
         // By default, UsernamePasswordAuthenticationFilter listens to "/login" path.
         // In our case, we use "/auth". So, we need to override the defaults.
-        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(jwtConfig.getUri(), "POST"));
+        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(jwtConfig.getUri(), HttpMethod.POST));
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
-
         try {
+            // Get credentials from request.
+            var userCredentials = new ObjectMapper().readValue(request.getInputStream(), AuthenticationRequest.class);
 
-            // 1. Get credentials from request
-            UserCredentials creds = new ObjectMapper().readValue(request.getInputStream(), UserCredentials.class);
+            // Create auth object, that contains the credentials, which will be used by auth manager
+            var authToken = new UsernamePasswordAuthenticationToken(userCredentials.getUsername(),
+                                                                    userCredentials.getPassword(),
+                                                                    Collections.emptyList());
 
-            // 2. Create auth object (contains credentials) which will be used by auth manager
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(creds.getUsername(),
-                                                                                                    creds.getPassword(),
-                                                                                                    Collections.emptyList());
-
-            // 3. Authentication manager authenticate the user, and use UserDetialsServiceImpl::loadUserByUsername() method to load the user.
+            // Authentication manager authenticates the user, and uses the UserDetailsServiceImpl::loadUserByUsername() method to load the user.
             return authManager.authenticate(authToken);
 
         } catch (IOException e) {
@@ -68,31 +67,31 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication auth) throws IOException, ServletException {
+                                            Authentication auth) {
 
-        Long now = System.currentTimeMillis();
-        String token = Jwts.builder()
-                           .setSubject(auth.getName())
-                           // Convert to list of strings.
-                           // This is important because it affects the way we get them back in the Gateway.
-                           .claim("authorities",
-                                  auth.getAuthorities()
-                                      .stream()
-                                      .map(GrantedAuthority::getAuthority)
-                                      .collect(Collectors.toList()))
-                           .setIssuedAt(new Date(now))
-                           .setExpiration(new Date(now + jwtConfig.getExpiration() * 1000))  // in milliseconds
-                           .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret().getBytes())
-                           .compact();
+        var now = System.currentTimeMillis();
+        var token = Jwts.builder()
+                        .setSubject(auth.getName())
+                        // Convert to list of strings.
+                        // This is important because it affects the way we get them back at the gateway.
+                        .claim("authorities",
+                               auth.getAuthorities()
+                                   .stream()
+                                   .map(GrantedAuthority::getAuthority)
+                                   .collect(Collectors.toList()))
+                        .setIssuedAt(new Date(now))
+                        .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getExpiration())))
+                        .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret().getBytes())
+                        .compact();
 
-        // Add token to header
+        // Add token to header.
         response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
     }
 
-    // A (temporary) class just to represent the user credentials
-    private static class UserCredentials {
+    private static class AuthenticationRequest {
 
-        private String username, password;
+        private String username;
+        private String password;
 
         public String getUsername() {
             return username;
