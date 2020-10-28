@@ -2,7 +2,6 @@ package com.jellehuibregtse.cah.authservice.auth;
 
 import com.jellehuibregtse.cah.authservice.jwt.JwtConfig;
 import com.jellehuibregtse.cah.authservice.service.JwtTokenService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,5 +22,6 @@ public class AuthTests {
         var token = jwtTokenService.generateToken("subject");
 
         assertNotNull(token);
+        assertFalse(token.contains(jwtConfig.getPrefix()));
     }
 }

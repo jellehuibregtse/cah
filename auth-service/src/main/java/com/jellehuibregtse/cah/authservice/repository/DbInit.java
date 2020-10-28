@@ -28,14 +28,12 @@ public class DbInit implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // Delete all
         this.repository.deleteAll();
 
         final List<ApplicationUser> users =
                 Arrays.asList(new ApplicationUser(1, "jelle", passwordEncoder.encode("12345"), "USER"),
                               new ApplicationUser(2, "admin", passwordEncoder.encode("12345"), "ADMIN"));
 
-        // Save to db
         this.repository.saveAll(users);
     }
 }
