@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./css/App.css";
 import NavBar from "./components/NavBar"
 import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
@@ -10,12 +10,35 @@ import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
+const App = () => {
+    const [cards, setCards] = useState([]);
+
+    useEffect(() => {
+        function fetchCards() {
+            setCards([
+                {
+                    "id": "1",
+                    "status": "NOT_PLAYED",
+                    "cardText": "card1",
+                    "cardType": "WHITE"
+                },
+                {
+                    "id": "2",
+                    "status": "NOT_PLAYED",
+                    "cardText": "card2",
+                    "cardType": "WHITE"
+                }
+            ]);
+        }
+
+        fetchCards();
+    }, []);
+
     return (
         <Router>
             <NavBar/>
             <Switch>
-                <Route path="/game" component={Game}/>
+                <Route path="/game" exact render={() => (<Game cards={cards}/>)}/>
                 <Route path="/admin" component={CreateCard}/>
                 <Route path="/login" component={Login}/>
                 <Route path="*"><Redirect to="/"/></Route>

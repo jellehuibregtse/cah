@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Card from "./Card";
+import Card from "./fragments/Card";
 import {post} from "axios";
 
 export default function CreateCard() {
