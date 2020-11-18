@@ -65,5 +65,4 @@ public class JwtConfig {
     public void setSecret(String secret) {
         this.secret = secret;
     }
-
 }
