@@ -7,7 +7,7 @@ const Card = (props) => {
         return props.cardType === "WHITE" ? "card white_card" : "card black_card";
     }
 
-    if (!props.id || !props.index) {
+    if (props.id === null || props.index === null || typeof props.index === 'undefined') {
         return (
             <div className="card_holder">
                 <div className={getCardStyle()}>

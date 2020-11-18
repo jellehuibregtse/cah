@@ -16,8 +16,8 @@ const Deck = (props) => {
     })
 
     return (
-        <div className="container-fluid mt-4">
-            <h3 className="m-3 justify-content-start">Your hand</h3>
+        <div className="container-fluid mt-4" {...props} ref={props.innerRef}>
+            <h3 className="m-3 justify-content-start">{props.name}</h3>
             <div className="row justify-content-start">
                 {cards}
             </div>

@@ -27,6 +27,12 @@ const App = () => {
                     "status": "NOT_PLAYED",
                     "cardText": "card2",
                     "cardType": "WHITE"
+                },
+                {
+                    "id": "3",
+                    "status": "NOT_PLAYED",
+                    "cardText": "card3",
+                    "cardType": "WHITE"
                 }
             ]);
         }

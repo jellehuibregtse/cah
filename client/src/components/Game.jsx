@@ -10,52 +10,64 @@ const CardStatus = {
 };
 
 const Game = (props) => {
-    const {cards} = props;
 
-    const [items, setItems] = useState([]);
-    const playedItems = items.filter((item) => item.status === CardStatus.PLAYED);
-    const notPlayedItems = items.filter((item) => item.status === CardStatus.NOT_PLAYED);
+    const [playedCards, setPlayedCards] = useState([]);
+    const [handCards, setHandCards] = useState([]);
 
     useEffect(() => {
-        if (cards.length > 0) {
-            setItems(cards.map((card, index) => {
-                card.index = index;
-                item.parentId = card.id;
-                item.cardType = card.cardType;
-                item.cardText = card.cardText;
-                return item;
-            })).flat());
-        }
-    }, [cards]);
+        setPlayedCards(props.cards.filter((item) => item.status === CardStatus.PLAYED));
+        setHandCards(props.cards.filter((item) => item.status === CardStatus.NOT_PLAYED));
+    }, [props.cards])
+
+
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+
+        return result;
+    };
+
+    const move = (source, destination, droppableSource, droppableDestination) => {
+        const sourceClone = Array.from(source);
+        const destClone = Array.from(destination);
+        const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+        destClone.splice(droppableDestination.index, 0, removed);
+
+        const result = {};
+        result[droppableSource.droppableId] = sourceClone;
+        result[droppableDestination.droppableId] = destClone;
+
+        return result;
+    };
 
     const onDragEnd = (result) => {
-        const {destination, source, draggableId} = result;
+        const {destination, source} = result;
 
         if (!destination) return;
 
-        if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-
-        const card = cards.find((card) => card.id === items.find((item) => item.id.toString() === draggableId).parentId);
-
-        if (destination.droppableId === 'play') {
-            moveCard(card, draggableId, CardStatus.PLAYED);
+        if (destination.droppableId === source.droppableId) {
+            if (destination.droppableId === 'hand') {
+                setHandCards(reorder(handCards, source.index, destination.index));
+            } else if (destination.droppableId === 'played') {
+                setPlayedCards(reorder(playedCards, source.index, destination.index));
+            }
+        } else {
+            if (destination.droppableId === 'hand') {
+                result = move(playedCards, handCards, source, destination);
+                setPlayedCards(result.played);
+                setHandCards(result.hand);
+            } else if (destination.droppableId === 'played') {
+                result = move(handCards, playedCards, source, destination);
+                setPlayedCards(result.played);
+                setHandCards(result.hand);
+            }
         }
     }
 
-    const moveCard = (card, draggableId, status) => {
-        card.items[items.find((item) => item.id.toString() === draggableId).index].status = status;
-        //MessagingService.fetchHandler("PUT", "/card-service/card/" + card.id, card).then().catch(() => {});
-        setItems(cards.map((card) => card.items.map((item, index) => {
-            item.index = index;
-            item.parentId = card.id;
-            item.cardType = card.cardType;
-            item.cardText = card.cardText;
-            return item;
-        })).flat());
-    }
-
     return (
-        <div>
+        <DragDropContext onDragEnd={onDragEnd}>
             <div className="game_left_side">
                 <div className="game_black_card_wrapper">
                     <p className="game_black_card_round_indicator">The black card for this round is:</p>
@@ -67,53 +79,38 @@ const Game = (props) => {
                 <div className="game_right_side_box game_white_card_wrapper">
                     <span tabIndex="0">The white cards played this round are:</span>
                     <div className="game_white_cards game_right_side_cards">
-                        <DragDropContext onDragEnd={onDragEnd}>
-                            <Droppable droppableId={"cards"}>
-                                {(provided) => (
-                                    <Deck
-                                        key={1}
-                                        id={1}
-                                        name="Hand"
-                                        items={notPlayedItems}
-                                        innerRef={provided.innerRef}
-                                        {...provided.droppableProps}
-                                    >
-                                        {provided.placeholder}
-                                    </Deck>
-                                )}
-                            </Droppable>
-                        </DragDropContext>
+                        <Droppable droppableId={"played"} direction="horizontal">
+                            {(provided) => (
+                                <Deck
+                                    key={1}
+                                    id={1}
+                                    name="Played"
+                                    items={playedCards}
+                                    innerRef={provided.innerRef}
+                                    {...provided.droppableProps}
+                                >
+                                    {provided.placeholder}
+                                </Deck>
+                            )}
+                        </Droppable>
+                        <Droppable droppableId={"hand"} direction="horizontal">
+                            {(provided) => (
+                                <Deck
+                                    key={2}
+                                    id={2}
+                                    name="Hand"
+                                    items={handCards}
+                                    innerRef={provided.innerRef}
+                                    {...provided.droppableProps}
+                                >
+                                    {provided.placeholder}
+                                </Deck>
+                            )}
+                        </Droppable>
                     </div>
                 </div>
             </div>
-            {/*<div className="game_right_side">*/}
-            {/*    <div className="game_right_side_box game_white_card_wrapper">*/}
-            {/*        <span tabIndex="0">The white cards played this round are:</span>*/}
-            {/*        <div className="game_white_cards game_right_side_cards">*/}
-            {/*            <Card cardType="WHITE"*/}
-            {/*                  cardText="The EDL."/>*/}
-
-            {/*            <Card cardType="WHITE"*/}
-            {/*                  cardText="The Big Bang."/>*/}
-
-            {/*            <Card cardType="WHITE"*/}
-            {/*                  cardText="Half a kilo of pure China White heroin."/>*/}
-
-            {/*            <Card cardType="WHITE"*/}
-            {/*                  cardText="Pauline Hanson."/>*/}
-
-            {/*            <Card cardType="WHITE"*/}
-            {/*                  cardText="Seeing my village burned and my family slaughtered before my eyes."/>*/}
-
-            {/*            <Card cardType="WHITE"*/}
-            {/*                  cardText="Some god damn peace and quiet."/>*/}
-
-            {/*            <Card cardType="WHITE"*/}
-            {/*                  cardText="Everything."/>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
-        </div>
+        </DragDropContext>
     );
 }
 
