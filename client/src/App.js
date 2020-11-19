@@ -18,7 +18,7 @@ const App = () => {
             setCards([
                 {
                     "id": "1",
-                    "status": "NOT_PLAYED",
+                    "status": "PLAYED",
                     "cardText": "card1",
                     "cardType": "WHITE"
                 },

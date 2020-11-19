@@ -119,14 +119,8 @@ h2, h3, h4 {
 }
 
 .game_black_card_wrapper {
-    width: 232px;
+    width: 250px;
     float: left
-}
-
-.game_black_card {
-    width: 232px;
-    height: 232px;
-    margin-top: 15px
 }
 
 .game_left_side {

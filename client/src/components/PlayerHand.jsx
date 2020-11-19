@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "./fragments/Card";
 
-const GameHand = (props) => {
+const PlayerHand = (props) => {
     const cards = props.items.map((item, index) => {
         return (
             <div className="col-auto mb-3">
@@ -25,4 +25,4 @@ const GameHand = (props) => {
     )
 }
 
-export default GameHand;
+export default PlayerHand;

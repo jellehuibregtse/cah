@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {DragDropContext, Droppable} from "react-beautiful-dnd";
 import Card from "./fragments/Card";
-import Deck from "./Deck";
 import "../css/Card.css"
+import PlayerHand from "./PlayerHand";
+import GameHand from "./GameHand";
 
 const CardStatus = {
     NOT_PLAYED: "NOT_PLAYED",
@@ -70,18 +71,18 @@ const Game = (props) => {
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="game_left_side">
                 <div className="game_black_card_wrapper">
-                    <p className="game_black_card_round_indicator">The black card for this round is:</p>
+                    <p className="ml-1">The black card for this round is:</p>
                     <Card cardType="BLACK"
                           cardText="When I am Prime Minister of Canada, I will create the Ministry of ____."/>
                 </div>
             </div>
             <div className="game_right_side">
                 <div className="game_right_side_box game_white_card_wrapper">
-                    <span tabIndex="0">The white cards played this round are:</span>
+                    <span className="ml-3">The white cards played this round are:</span>
                     <div className="game_white_cards game_right_side_cards">
                         <Droppable droppableId={"played"} direction="horizontal">
                             {(provided) => (
-                                <Deck
+                                <GameHand
                                     key={1}
                                     id={1}
                                     name="Played"
@@ -90,12 +91,12 @@ const Game = (props) => {
                                     {...provided.droppableProps}
                                 >
                                     {provided.placeholder}
-                                </Deck>
+                                </GameHand>
                             )}
                         </Droppable>
                         <Droppable droppableId={"hand"} direction="horizontal">
                             {(provided) => (
-                                <Deck
+                                <PlayerHand
                                     key={2}
                                     id={2}
                                     name="Hand"
@@ -104,7 +105,7 @@ const Game = (props) => {
                                     {...provided.droppableProps}
                                 >
                                     {provided.placeholder}
-                                </Deck>
+                                </PlayerHand>
                             )}
                         </Droppable>
                     </div>
