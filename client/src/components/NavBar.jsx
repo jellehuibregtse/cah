@@ -1,6 +1,7 @@
 import React from 'react';
+import {Button} from "@material-ui/core";
 
-const NavBar = () => {
+const NavBar = (props) => {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <a href="/" className="navbar-brand">Card Against Humanity</a>
@@ -31,9 +32,9 @@ const NavBar = () => {
                         </div>
                     </li>
                     <li className="nav-item last">
-                        <a href={"/login"} className="nav-link">
-                            Login
-                        </a>
+                        {!props.loggedIn ? <Button href={'/login'}>Login</Button> :
+                            <Button onClick={() => sessionStorage.clear()}
+                                    href="/">Logout</Button>}
                     </li>
                 </ul>
             </div>
