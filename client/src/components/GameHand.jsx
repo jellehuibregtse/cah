@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "./fragments/Card";
 
-const Deck = (props) => {
+const GameHand = (props) => {
     const cards = props.items.map((item, index) => {
         return (
             <div className="col-auto mb-3">
@@ -16,8 +16,8 @@ const Deck = (props) => {
     })
 
     return (
-        <div className="container-fluid mt-4" {...props} ref={props.innerRef}>
-            <h3 className="m-3 justify-content-start">{props.name}</h3>
+        <div className="container-fluid mt-3" {...props} ref={props.innerRef}>
+            {/*<h3 className="m-3 justify-content-start">{props.name}</h3>*/}
             <div className="row justify-content-start">
                 {cards}
             </div>
@@ -25,4 +25,4 @@ const Deck = (props) => {
     )
 }
 
-export default Deck;
+export default GameHand;
