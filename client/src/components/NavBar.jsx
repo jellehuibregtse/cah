@@ -32,8 +32,8 @@ const NavBar = (props) => {
                         </div>
                     </li>
                     <li className="nav-item last">
-                        {!props.loggedIn ? <Button href={'/login'}>Login</Button> :
-                            <Button onClick={() => sessionStorage.clear()}
+                        {!props.loggedIn ? <Button className="ml-2" variant="contained" href={'/login'}>Login</Button> :
+                            <Button className="ml-2" variant="contained" onClick={() => sessionStorage.clear()}
                                     href="/">Logout</Button>}
                     </li>
                 </ul>

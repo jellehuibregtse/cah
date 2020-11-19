@@ -11,9 +11,14 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
+    const [loggedIn, setLoggedIn] = useState(false);
     const [cards, setCards] = useState([]);
 
     useEffect(() => {
+        if (sessionStorage.getItem("authToken") != null) {
+            setLoggedIn(true);
+        }
+
         function fetchCards() {
             setCards([
                 {
@@ -42,7 +47,7 @@ const App = () => {
 
     return (
         <Router>
-            <NavBar/>
+            <NavBar loggedIn={loggedIn}/>
             <Switch>
                 <Route path="/game" exact render={() => (<Game cards={cards}/>)}/>
                 <Route path="/admin" component={CreateCard}/>
