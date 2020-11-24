@@ -48,9 +48,11 @@ h2, h3, h4 {
 }
 
 .your_hand {
-    position: absolute;
-    bottom: 10px;
-    right: 5px
+    float: left;
+    margin: 10px;
+    height: 285px;
+    width: 100vw;
+    background-color: #999999
 }
 
 .game_hand {
@@ -125,7 +127,7 @@ h2, h3, h4 {
 
 .game_left_side {
     float: left;
-    width: 232px;
+    width: 250px;
     padding-left: 10px;
     padding-top: 10px
 }
@@ -133,17 +135,6 @@ h2, h3, h4 {
 .game_right_side_box {
     height: 60%;
     margin: 10px
-}
-
-.game_right_side_cards {
-    margin-top: 15px;
-    min-width: 600px;
-    cursor: pointer;
-    z-index: 200
-}
-
-.game_right_side_cards .card_holder, .game_white_cards_binder {
-    z-index: 200
 }
 
 .game_white_cards_binder {
@@ -189,4 +180,9 @@ h2, h3, h4 {
 .card_text {
     word-wrap: break-word;
     overflow: hidden
+}
+
+.game_white_cards {
+    height: 250px;
+    max-width: 100vw;
 }
