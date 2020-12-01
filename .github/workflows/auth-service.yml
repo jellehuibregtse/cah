@@ -38,13 +38,13 @@ jobs:
     - 
       name: Move file
       working-directory: ./auth-service
-      run: mkdir deployment && cp target/*.jar deployment
+      run: cp target/*.jar .
     - 
       name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: Package
-        path: ./auth-service/deployment
+        path: ./auth-service/
         
   docker:
     name: Download artifact, build docker image and push to registry.
@@ -72,7 +72,7 @@ jobs:
       name: Build and push Docker images
       uses: docker/build-push-action@v2.2.0
       with:
-        context: ./auth-service/
+        context: ./auth-service
         # Path to the Dockerfile
         file: ./auth-service/Dockerfile
         # Push is a shorthand for --output=type=registry
