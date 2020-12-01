@@ -72,7 +72,7 @@ jobs:
       name: Build and push Docker images
       uses: docker/build-push-action@v2.2.0
       with:
-        context: ./auth-service/Dockerfile
+        context: ./auth-service/
         # Path to the Dockerfile
         file: ./auth-service/Dockerfile
         # Push is a shorthand for --output=type=registry
