@@ -33,14 +33,14 @@ public class UserController {
     }
 
     /**
-     * Check if email is taken.
+     * Check if username is taken.
      *
-     * @param email that needs to be found.
+     * @param username that needs to be found.
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @GetMapping
-    public ResponseEntity<Boolean> emailTaken(@RequestParam String email) {
-        return ResponseEntity.ok(applicationUserRepository.findByUsername(email).isPresent());
+    public ResponseEntity<Boolean> usernameTaken(@RequestParam String username) {
+        return ResponseEntity.ok(applicationUserRepository.findByUsername(username).isPresent());
     }
 
     /**
@@ -55,7 +55,7 @@ public class UserController {
 
         applicationUserRepository.save(user);
 
-        return ResponseEntity.ok(String.format("User with email: %s has been successfully created!",
+        return ResponseEntity.ok(String.format("User with username: %s has been successfully created!",
                                                user.getUsername()));
     }
 
@@ -99,9 +99,9 @@ public class UserController {
     }
 
     /**
-     * Gets the principal (email) of the currently logged in user.
+     * Gets the principal (username) of the currently logged in user.
      *
-     * @return email.
+     * @return username.
      */
     private String getPrincipal() {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
