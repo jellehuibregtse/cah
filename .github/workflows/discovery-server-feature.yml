@@ -3,10 +3,10 @@ name: Discovery Server CI – Feature Branch
 on:
   push:
     branches-ignore: 
-      - 'main'
-      - 'release*'
+      - main
+      - release*
     paths:
-      - ./discovery-server/**
+      - discovery-server/**
 
 jobs:
   test:
