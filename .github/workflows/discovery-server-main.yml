@@ -1,4 +1,4 @@
-name: Discovery Service CI - Main Branch
+name: Discovery Server CI - Main Branch
 
 on:
   push:
