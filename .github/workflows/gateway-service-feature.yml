@@ -3,8 +3,10 @@ name: Gateway Service CI – Feature Branch
 on:
   push:
     branches-ignore: 
-      - 'main'
-      - 'release*'
+      - main
+      - release*
+    paths:
+      - gateway-service/**
 
 jobs:
   test:
