@@ -3,10 +3,10 @@ name: Auth Service CI – Feature Branch
 on:
   push:
     branches-ignore: 
-      - 'main'
-      - 'release*'
+      - main
+      - release*
     paths:
-      - ./auth-service/**
+      - auth-service/**
 
 jobs:
   test:
