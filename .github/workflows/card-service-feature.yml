@@ -3,10 +3,10 @@ name: Card Service CI – Feature Branch
 on:
   push:
     branches-ignore: 
-      - 'main'
-      - 'release*'
+      - main
+      - release*
     paths:
-      - ./card-service/**
+      - card-service/**
 
 jobs:
   test:
