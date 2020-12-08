@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-18.04
     needs: [test, sonar]
     env:
-      REPO: ${{ secrets.DOCKER_REPO_DISCOVERY_SERVER}}
+      REPO: ${{ secrets.DOCKER_REPO_DISCOVERY_SERVER }}
 
     steps:
       - uses: actions/checkout@v1
