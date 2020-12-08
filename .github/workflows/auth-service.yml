@@ -1,13 +1,14 @@
-name: Auth Service CI
+name: Auth Service CI – Feature Branch
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches-ignore: 
+      - 'main'
+      - 'release*'
 
 jobs:
   test:
+    name: Build and unit test
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +19,7 @@ jobs:
         java-version: 11
     - name: Build with Maven
       working-directory: ./auth-service
-      run: mvn -B package -Dmaven.test.skip=true --file pom.xml
+      run: mvn -B clean package -Dmaven.test.skip=true --file pom.xml
     - name: Test with Maven
       working-directory: ./auth-service
       run: mvn -B test
