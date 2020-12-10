@@ -6,7 +6,7 @@ on:
       - main
       - release*
     paths:
-      - card-service/**
+      - client/**
   pull_request:
     types: [opened, synchronize, reopened]
     
