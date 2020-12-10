@@ -27,13 +27,13 @@ jobs:
           
   docker:
     name: Publish to Docker Hub
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     needs: [build]
     env:
       REPO: ${{ secrets.DOCKER_REPO_CARD_SERVICE}}
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:

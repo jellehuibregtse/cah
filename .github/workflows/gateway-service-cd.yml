@@ -1,11 +1,11 @@
-name: Auth Service CD
+name: Gateway CD
 
 on:
   push:
     branches:
       - main
     paths:
-      - auth-service/**
+      - gateway-service/**
 
 jobs:
   build:
@@ -19,10 +19,10 @@ jobs:
         with:
           java-version: 11
       - name: Maven Package
-        working-directory: ./auth-service
+        working-directory: ./gateway-service
         run: mvn -B clean package -DskipTests
       - name: Maven Verify
-        working-directory: ./auth-service
+        working-directory: ./gateway-service
         run: mvn -B clean verify
           
   docker:
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     env:
-      REPO: ${{ secrets.DOCKER_REPO_AUTH_SERVICE }}
+      REPO: ${{ secrets.DOCKER_REPO_GATEWAY}}
 
     steps:
       - uses: actions/checkout@v2
@@ -40,7 +40,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
       - name: Build Docker image
-        working-directory: ./auth-service
+        working-directory: ./gateway-service
         run: docker build -t $REPO:latest -t $REPO:${GITHUB_SHA::8} .
       - name: Publish Docker image
         run: docker push $REPO
