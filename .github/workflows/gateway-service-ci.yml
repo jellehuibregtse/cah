@@ -1,4 +1,4 @@
-name: Card Service CI – Feature Branch
+name: Gateway CI
 
 on:
   push:
@@ -6,11 +6,13 @@ on:
       - main
       - release*
     paths:
-      - card-service/**
+      - gateway-service/**
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   test:
-    name: Build and unit test
+    name: Build and test
     runs-on: ubuntu-latest
 
     steps:
@@ -20,8 +22,8 @@ jobs:
       with:
         java-version: 11
     - name: Build with Maven
-      working-directory: ./card-service
+      working-directory: ./gateway-service
       run: mvn -B clean package -Dmaven.test.skip=true --file pom.xml
     - name: Test with Maven
-      working-directory: ./card-service
+      working-directory: ./gateway-service
       run: mvn -B test

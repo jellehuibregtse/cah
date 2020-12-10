@@ -1,4 +1,4 @@
-name: Gateway Service CI – Feature Branch
+name: Discovery Server CI
 
 on:
   push:
@@ -6,11 +6,13 @@ on:
       - main
       - release*
     paths:
-      - gateway-service/**
+      - discovery-server/**
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   test:
-    name: Build and unit test
+    name: Build and test
     runs-on: ubuntu-latest
 
     steps:
@@ -20,8 +22,8 @@ jobs:
       with:
         java-version: 11
     - name: Build with Maven
-      working-directory: ./gateway-service
+      working-directory: ./discovery-server
       run: mvn -B clean package -Dmaven.test.skip=true --file pom.xml
     - name: Test with Maven
-      working-directory: ./gateway-service
+      working-directory: ./discovery-server
       run: mvn -B test

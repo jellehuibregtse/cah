@@ -1,4 +1,4 @@
-name: Auth Service CI – Feature Branch
+name: Auth Service CI
 
 on:
   push:
@@ -7,10 +7,12 @@ on:
       - release*
     paths:
       - auth-service/**
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   test:
-    name: Build and unit test
+    name: Build and test
     runs-on: ubuntu-latest
 
     steps:
