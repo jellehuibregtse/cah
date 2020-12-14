@@ -22,5 +22,5 @@ jobs:
         node-version: '12'
     - run: npm install
       working-directory: ./client
-    - run: npm test --passWithNoTests
+    - run: npm test
       working-directory: ./client
