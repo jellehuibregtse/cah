@@ -7,3 +7,4 @@
 ![Gateway CD](https://github.com/jellehuibregtse/cah/workflows/Gateway%20CD/badge.svg)
 ![Auth Service CI](https://github.com/jellehuibregtse/cah/workflows/Auth%20Service%20CI/badge.svg)
 ![Auth Service CD](https://github.com/jellehuibregtse/cah/workflows/Auth%20Service%20CD/badge.svg)
+![Gateway CI](https://github.com/jellehuibregtse/cah/workflows/Gateway%20CI/badge.svg)
