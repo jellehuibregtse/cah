@@ -25,4 +25,9 @@ public class ApplicationUser {
     private @NotNull String username;
     private @NotNull String password;
     private String role;
+
+    public ApplicationUser(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }
