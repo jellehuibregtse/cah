@@ -1,7 +1,8 @@
 package com.jellehuibregtse.cah.authservice;
 
 import com.jellehuibregtse.cah.authservice.controller.TestController;
-import org.junit.Assert;
+import com.jellehuibregtse.cah.authservice.controller.UserController;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,8 +15,12 @@ class AuthServiceApplicationTests {
     @Autowired
     private TestController testController;
 
+    @Autowired
+    private UserController userController;
+
     @Test
-    public void contextLoads() {
-        Assert.assertNotNull(testController);
+    void contextLoads() {
+        Assertions.assertNotNull(testController);
+        Assertions.assertNotNull(userController);
     }
 }
