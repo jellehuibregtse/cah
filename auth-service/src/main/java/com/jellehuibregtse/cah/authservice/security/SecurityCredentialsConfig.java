@@ -70,6 +70,12 @@ public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
             .permitAll()
             .antMatchers("/actuator/**")
             .permitAll()
+            // Allow POST request for creating a new user
+            .antMatchers(HttpMethod.POST, "/users/**")
+            .permitAll()
+            // Allow GET for checking if a user with email has been taken
+            .antMatchers(HttpMethod.GET, "/users/**")
+            .permitAll()
             // Any other requests must be authenticated.
             .anyRequest()
             .authenticated();
