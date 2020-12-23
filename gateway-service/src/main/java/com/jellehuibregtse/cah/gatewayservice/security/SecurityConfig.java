@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // Allow all who are accessing authentication service.
             .antMatchers(HttpMethod.POST, jwtConfig.getUri())
             .permitAll()
-            .antMatchers("/actuator/health/**", "/actuator/routes/**")
+            .antMatchers("/actuator/**")
             .permitAll()
             // Any other request must be authenticated.
             .anyRequest()

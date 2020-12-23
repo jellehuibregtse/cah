@@ -1,5 +1,7 @@
 package com.jellehuibregtse.cah.gatewayservice.security;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Jelle Huibregtse
  */
+@Getter
+@Setter
 @Configuration
 public class JwtConfig {
 
@@ -25,44 +29,4 @@ public class JwtConfig {
 
     @Value("${security.jwt.secret:JwtSecretKey}")
     private String secret;
-
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    public String getHeader() {
-        return header;
-    }
-
-    public void setHeader(String header) {
-        this.header = header;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    public int getExpiration() {
-        return expiration;
-    }
-
-    public void setExpiration(int expiration) {
-        this.expiration = expiration;
-    }
-
-    public String getSecret() {
-        return secret;
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
 }

@@ -4,6 +4,7 @@ import Card from "./fragments/Card";
 import "../css/Card.css"
 import PlayerHand from "./PlayerHand";
 import GameHand from "./GameHand";
+import {Button, Grid} from "@material-ui/core";
 
 const CardStatus = {
     NOT_PLAYED: "NOT_PLAYED",
@@ -69,31 +70,46 @@ const Game = (props) => {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div className="game_left_side">
-                <div className="game_black_card_wrapper">
-                    <p className="ml-1">The black card for this round is:</p>
-                    <Card cardType="BLACK"
-                          cardText="When I am Prime Minister of Canada, I will create the Ministry of ____."/>
-                </div>
-            </div>
-            <div className="game_right_side">
-                <div className="game_right_side_box game_white_card_wrapper">
-                    <span className="ml-3">The white cards played this round are:</span>
-                    <div className="game_white_cards game_right_side_cards">
-                        <Droppable droppableId={"played"} direction="horizontal">
-                            {(provided) => (
-                                <GameHand
-                                    key={1}
-                                    id={1}
-                                    name="Played"
-                                    items={playedCards}
-                                    innerRef={provided.innerRef}
-                                    {...provided.droppableProps}
-                                >
-                                    {provided.placeholder}
-                                </GameHand>
-                            )}
-                        </Droppable>
+            <Grid container>
+                <Grid container item spacing={1}>
+                    <div className="game_left_side">
+                        <div className="game_black_card_wrapper">
+                            <p className="ml-1">The black card for this round is:</p>
+                            <Card cardType="BLACK"
+                                  cardText="When I am Prime Minister of Canada, I will create the Ministry of ____."/>
+
+                        </div>
+                        <div className="justify-content-center">
+                            <Button variant="contained"
+                                    size="medium">Confirm selection</Button>
+                        </div>
+                    </div>
+                    <div className="game_right_side">
+                        <div className="game_right_side_box game_white_card_wrapper">
+                            <span className="ml-3">The white cards played this round are:</span>
+                            <div className="game_white_cards game_right_side_cards">
+                                <Droppable droppableId={"played"} direction="horizontal">
+                                    {(provided) => (
+                                        <GameHand
+                                            key={1}
+                                            id={1}
+                                            name="Played"
+                                            items={playedCards}
+                                            innerRef={provided.innerRef}
+                                            {...provided.droppableProps}
+                                        >
+                                            {provided.placeholder}
+                                        </GameHand>
+                                    )}
+                                </Droppable>
+
+                            </div>
+                        </div>
+                    </div>
+                </Grid>
+
+                <Grid container item>
+                    <div className="your_hand">
                         <Droppable droppableId={"hand"} direction="horizontal">
                             {(provided) => (
                                 <PlayerHand
@@ -109,8 +125,8 @@ const Game = (props) => {
                             )}
                         </Droppable>
                     </div>
-                </div>
-            </div>
+                </Grid>
+            </Grid>
         </DragDropContext>
     );
 }
