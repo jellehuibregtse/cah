@@ -11,7 +11,7 @@
 <br />
 <p align="center">
 
-  <h2 align="center">Cards Against Humanity Clone</h3>
+  <h1 align="center">Cards Against Humanity Clone</h3>
 
   <p align="center">
     An open source Cards Against Humanity Clone which can be played online!
@@ -26,6 +26,83 @@
     <a href="https://github.com/jellehuibregtse/cah/issues">Request Feature</a>
   </p>
 </p>
+
+
+
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#pipeline-status">Pipeline Status</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+  </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+### Built With
+The frontend has been build with:
+* React JS
+* Chakra UI
+
+The backend has been build with:
+* Java Spring Boot
+* PostgreSQL
+
+
+<!-- PROJECT STATUS -->
+### Pipeline Status
+![Card Service CI](https://github.com/jellehuibregtse/cah/workflows/Card%20Service%20CI/badge.svg)
+![Card Service CD](https://github.com/jellehuibregtse/cah/workflows/Card%20Service%20CD/badge.svg)
+![Discovery Server CI](https://github.com/jellehuibregtse/cah/workflows/Discovery%20Server%20CI/badge.svg)
+![Discovery Server CD](https://github.com/jellehuibregtse/cah/workflows/Discovery%20Server%20CD/badge.svg)
+![Gateway CI](https://github.com/jellehuibregtse/cah/workflows/Gateway%20CI/badge.svg)
+![Gateway CD](https://github.com/jellehuibregtse/cah/workflows/Gateway%20CD/badge.svg)
+![Auth Service CI](https://github.com/jellehuibregtse/cah/workflows/Auth%20Service%20CI/badge.svg)
+![Auth Service CD](https://github.com/jellehuibregtse/cah/workflows/Auth%20Service%20CD/badge.svg)
+![Gateway CI](https://github.com/jellehuibregtse/cah/workflows/Gateway%20CI/badge.svg)
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+
+
+### Prerequisites
+
+
+
+
+### Installation
+
+
+
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+
+
+<!-- LICENSE -->
+## License
+
+This project is licensed under the [MIT](https://opensource.org/licenses/MIT) license. <a href="https://github.com/jellehuibregtse/cah"><strong>Go to the license »</strong></a>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [contributors-shield]: https://img.shields.io/github/contributors/jellehuibregtse/cah?logo=github&logoColor=lightgrey&style=for-the-badge
