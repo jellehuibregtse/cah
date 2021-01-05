@@ -1,31 +1,56 @@
 import React from 'react';
-import {Draggable} from 'react-beautiful-dnd';
+import { Draggable } from 'react-beautiful-dnd';
+import { Box } from '@chakra-ui/react';
 
 export default function Card(props) {
-    const getCardStyle = () => {
-        return props.cardType === 'WHITE' ? 'card white_card' : 'card black_card';
-    };
-
     if (props.id === null || props.index === null || typeof props.index === 'undefined') {
         return (
-            <div className="card_holder">
-                <div className={getCardStyle()}>
-                    <span className="card_text">{props.cardText}</span>
-                </div>
-            </div>
+            <Box
+                borderWidth='1px'
+                borderRadius='lg'
+                width='250px'
+                height='250px'
+                overflow='hidden'
+                bg={props.cardType === 'WHITE' ? 'white' : 'black'}
+                color={props.cardType === 'WHITE' ? 'black' : 'white'}>
+                <Box p='6'>
+                    <Box
+                        mt='1'
+                        fontWeight='bold'
+                        as='h3'
+                        lineHeight='tight'
+                    >
+                        {props.cardText}
+                    </Box>
+                </Box>
+            </Box>
         );
     } else {
         return (
             <Draggable draggableId={props.id} index={props.index}>
                 {(provided) => (
-                    <div className="card_holder"
-                         {...provided.draggableProps}
-                         {...provided.dragHandleProps}
-                         ref={provided.innerRef}>
-                        <div className={getCardStyle()}>
-                            <span className="card_text">{props.cardText}</span>
-                        </div>
-                    </div>
+                    <Box
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                        borderWidth='1px'
+                        borderRadius='lg'
+                        width='250px'
+                        height='250px'
+                        overflow='hidden'
+                        bg={props.cardType === 'WHITE' ? 'white' : 'black'}
+                        color={props.cardType === 'WHITE' ? 'black' : 'white'}>
+                        <Box p='6'>
+                            <Box
+                                mt='1'
+                                fontWeight='bold'
+                                as='h3'
+                                lineHeight='tight'
+                            >
+                                {props.cardText}
+                            </Box>
+                        </Box>
+                    </Box>
                 )}
             </Draggable>
         );

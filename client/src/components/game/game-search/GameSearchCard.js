@@ -1,10 +1,8 @@
 import React from 'react';
-import {Badge, Box, Button, Center} from '@chakra-ui/react';
-
-import {ArrowForwardIcon} from '@chakra-ui/icons';
+import { Badge, Box, Button, Center } from '@chakra-ui/react';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 export default function (props) {
-
     return (
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'>
             <Box p='6'>

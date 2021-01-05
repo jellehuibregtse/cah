@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {DragDropContext, Droppable} from 'react-beautiful-dnd';
-import '../css/Card.css';
-import PlayerHand from './PlayerHand';
-import GameHand from './GameHand';
-import {Button, Grid} from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import Hand from './Hand';
+import { Grid, GridItem, Text, VStack } from '@chakra-ui/react';
 import Card from './Card';
 
 const CardStatus = {
@@ -70,63 +68,48 @@ export default function Game(props) {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <Grid container>
-                <Grid container item spacing={1}>
-                    <div className="game_left_side">
-                        <div className="game_black_card_wrapper">
-                            <p className="ml-1">The black card for this round is:</p>
+            <VStack p='6' spacing={3} >
+                <Grid autoColumns>
+                    <GridItem>
+                        <VStack>
+                            <Text fontSize='xs' align='left'>The black card for this round is:</Text>
                             <Card cardType="BLACK"
                                   cardText="When I am Prime Minister of Canada, I will create the Ministry of ____."/>
-
-                        </div>
-                        <div className="justify-content-center">
-                            <Button variant="contained"
-                                    size="medium">Confirm selection</Button>
-                        </div>
-                    </div>
-                    <div className="game_right_side">
-                        <div className="game_right_side_box game_white_card_wrapper">
-                            <span className="ml-3">The white cards played this round are:</span>
-                            <div className="game_white_cards game_right_side_cards">
-                                <Droppable droppableId={'played'} direction="horizontal">
-                                    {(provided) => (
-                                        <GameHand
-                                            key={1}
-                                            id={1}
-                                            name="Played"
-                                            items={playedCards}
-                                            innerRef={provided.innerRef}
-                                            {...provided.droppableProps}
-                                        >
-                                            {provided.placeholder}
-                                        </GameHand>
-                                    )}
-                                </Droppable>
-
-                            </div>
-                        </div>
-                    </div>
-                </Grid>
-
-                <Grid container item>
-                    <div className="your_hand">
-                        <Droppable droppableId={'hand'} direction="horizontal">
+                        </VStack>
+                    </GridItem>
+                    <GridItem>
+                        <Text fontSize='xs'>The white cards played this round is:</Text>
+                        <Droppable droppableId={'played'} direction="horizontal">
                             {(provided) => (
-                                <PlayerHand
-                                    key={2}
-                                    id={2}
-                                    name="Hand"
-                                    items={handCards}
+                                <Hand
+                                    key={1}
+                                    id={1}
+                                    name="Played"
+                                    items={playedCards}
                                     innerRef={provided.innerRef}
                                     {...provided.droppableProps}
                                 >
                                     {provided.placeholder}
-                                </PlayerHand>
+                                </Hand>
                             )}
                         </Droppable>
-                    </div>
+                    </GridItem>
                 </Grid>
-            </Grid>
+                <Droppable droppableId={'hand'} direction="horizontal">
+                    {(provided) => (
+                        <Hand
+                            key={2}
+                            id={2}
+                            name="Hand"
+                            items={handCards}
+                            innerRef={provided.innerRef}
+                            {...provided.droppableProps}
+                        >
+                            {provided.placeholder}
+                        </Hand>
+                    )}
+                </Droppable>
+            </VStack>
         </DragDropContext>
     );
 }
