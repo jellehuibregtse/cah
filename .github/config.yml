@@ -1,0 +1,32 @@
+# Configuration for welcome - https://github.com/behaviorbot/welcome
+
+# Configuration for new-issue-welcome - https://github.com/behaviorbot/new-issue-welcome
+# Comment to be posted to on first time issues
+newIssueWelcomeComment: >
+  Thanks for opening this issue. If you haven't already, please check out the [contributing guidelines](https://github.com/jellehuibregtse/cah/blob/main/CONTRIBUTING.md).
+
+# Configuration for new-pr-welcome - https://github.com/behaviorbot/new-pr-welcome
+# Comment to be posted to on PRs from first time contributors in your repository
+newPRWelcomeComment: >
+  Thanks for opening this pull request! Please check out our [contributing guidelines](https://github.com/jellehuibregtse/cah/blob/main/CONTRIBUTING.md).
+
+# Configuration for first-pr-merge - https://github.com/behaviorbot/first-pr-merge
+# Comment to be posted to on pull requests merged by a first time user
+firstPRMergeComment: >
+  Congrats on merging your first pull request! If you haven't already, please check out the [contributing guidelines](https://github.com/jellehuibregtse/cah/blob/main/CONTRIBUTING.md).
+
+
+# Configuration for request-info - https://github.com/behaviorbot/request-info
+
+# Can be either a string :
+requestInfoReplyComment: >
+  Hey there, you didn't give us a lot of information on this issue. We would appreciate it if you could provide us with more details!
+
+# default titles to check against for lack of descriptiveness
+# MUST BE ALL LOWERCASE
+requestInfoDefaultTitles:
+  - update readme.md
+  - updates
+
+# Label to be added to Issues and Pull Requests with insufficient information given
+requestInfoLabelToAdd: needs-more-info
