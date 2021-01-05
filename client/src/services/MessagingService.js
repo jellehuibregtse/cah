@@ -14,23 +14,23 @@ export default class MessagingService {
             }
 
         })
-            .then((response) => {
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    throw new Error(response.status + " " + response.statusText);
-                }
-            })
-            .then((res) => {
-                try {
-                    result = typeof JSON.parse(res) === 'object' && JSON.parse(res) !== null ? JSON.parse(res) : res;
-                } catch (e) {
-                    result = res;
-                }
-            })
-            .catch(error => {
-                throw new Error(error.message);
-            });
+        .then((response) => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error(response.status + ' ' + response.statusText);
+            }
+        })
+        .then((res) => {
+            try {
+                result = typeof JSON.parse(res) === 'object' && JSON.parse(res) !== null ? JSON.parse(res) : res;
+            } catch (e) {
+                result = res;
+            }
+        })
+        .catch(error => {
+            throw new Error(error.message);
+        });
         return result;
     }
 }

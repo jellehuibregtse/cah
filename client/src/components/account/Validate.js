@@ -1,4 +1,4 @@
-import MessagingService from "../../services/MessagingService";
+import MessagingService from '../../services/MessagingService';
 
 export default class Validate {
     static isValidEmail(email) {
