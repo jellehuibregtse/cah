@@ -5,15 +5,15 @@ export default class Validate {
         if (email !== null) {
             if (email.length === 0)
                 return 'Email address is required!';
-            if (!/^(([^<>()\[\]\\,;:\s"]+([^<>()\[\]\\,;:\s"]+)*)|(".+"))$/.test(email))
+            if (!/^(([^<>()[\]\\,;:\s"]+([^<>()[\]\\,;:\s"]+)*)|(".+"))$/.test(email))
                 return 'Email contains illegal characters!';
-            if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+")).*$/.test(email))
+            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+")).*$/.test(email))
                 return 'Email is invalid! Try adding a valid local part.';
             if (!/^.*((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email))
                 return 'Email is invalid! Try adding a valid domain.';
             if (!/([@])/.test(email))
                 return 'Email is invalid! Try adding \'@\' before the domain.';
-            if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email))
+            if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email))
                 return 'Email is invalid!';
         }
         return true;
