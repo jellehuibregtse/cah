@@ -37,7 +37,7 @@ export default function (props) {
                 </Box>
 
                 <Center mt='3'>
-                    <Button w='sm' rightIcon={<ArrowForwardIcon/>}>Join</Button>
+                    <Button w='sm' rightIcon={<ArrowForwardIcon/>} onClick={() => window.location.href = '/game'}>Join</Button>
                 </Center>
             </Box>
         </Box>

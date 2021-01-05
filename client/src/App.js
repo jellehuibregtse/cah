@@ -78,7 +78,7 @@ export default function App() {
                     <Route path='/sign-up' component={SignUp}/>
                     <Route path='/games' component={GameSearch}/>
                     <Route path="/game" exact render={() => (<Game cards={cards}/>)}/>
-                    <Route path='*'><Redirect to='/'/></Route>
+                    <Route path='*'><Redirect to='/games'/></Route>
                 </Switch>
             </Router>
         </ChakraProvider>

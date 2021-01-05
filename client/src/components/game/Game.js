@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import Hand from './Hand';
-import { Grid, GridItem, Text, VStack } from '@chakra-ui/react';
+import { Box, Flex, Text, VStack } from '@chakra-ui/react';
 import Card from './Card';
+import Hand from './Hand';
 
 const CardStatus = {
     NOT_PLAYED: 'NOT_PLAYED',
@@ -68,48 +68,67 @@ export default function Game(props) {
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <VStack p='6' spacing={3} >
-                <Grid autoColumns>
-                    <GridItem>
-                        <VStack>
-                            <Text fontSize='xs' align='left'>The black card for this round is:</Text>
-                            <Card cardType="BLACK"
-                                  cardText="When I am Prime Minister of Canada, I will create the Ministry of ____."/>
-                        </VStack>
-                    </GridItem>
-                    <GridItem>
-                        <Text fontSize='xs'>The white cards played this round is:</Text>
-                        <Droppable droppableId={'played'} direction="horizontal">
-                            {(provided) => (
-                                <Hand
-                                    key={1}
-                                    id={1}
-                                    name="Played"
-                                    items={playedCards}
-                                    innerRef={provided.innerRef}
-                                    {...provided.droppableProps}
-                                >
-                                    {provided.placeholder}
-                                </Hand>
-                            )}
-                        </Droppable>
-                    </GridItem>
-                </Grid>
-                <Droppable droppableId={'hand'} direction="horizontal">
-                    {(provided) => (
-                        <Hand
-                            key={2}
-                            id={2}
-                            name="Hand"
-                            items={handCards}
-                            innerRef={provided.innerRef}
-                            {...provided.droppableProps}
-                        >
-                            {provided.placeholder}
-                        </Hand>
-                    )}
-                </Droppable>
-            </VStack>
+            <Flex>
+                <VStack
+                    p='6'
+                    m='3'
+                    align='left'
+                    borderWidth='1px'
+                    borderRadius='lg'>
+                    <Box>
+                        <Text fontSize='xs'>The black card for this round is:</Text>
+                    </Box>
+                    <Card cardType="BLACK"
+                          cardText="When I am Prime Minister of Canada, I will create the Ministry of ____."/>
+                </VStack>
+                <VStack
+                    p='6'
+                    m='3'
+                    align='left'
+                    borderWidth='1px'
+                    borderRadius='lg'
+                    w='79.4%'>
+                    <Text fontSize='xs'>The white cards played this round is:</Text>
+                    <Droppable droppableId={'played'} direction="horizontal">
+                        {(provided) => (
+                            <Hand
+                                key={1}
+                                id={1}
+                                name="Played"
+                                items={playedCards}
+                                innerRef={provided.innerRef}
+                                {...provided.droppableProps}
+                            >
+                                {provided.placeholder}
+                            </Hand>
+                        )}
+                    </Droppable>
+                </VStack>
+            </Flex>
+            <Flex>
+                <Box p='6'
+                     m='3'
+                     align='left'
+                     borderWidth='1px'
+                     borderRadius='lg'
+                     w='100%'
+                     h='300px'>
+                    <Droppable droppableId={'hand'} direction="horizontal">
+                        {(provided) => (
+                            <Hand
+                                key={2}
+                                id={2}
+                                name="Hand"
+                                items={handCards}
+                                innerRef={provided.innerRef}
+                                {...provided.droppableProps}
+                            >
+                                {provided.placeholder}
+                            </Hand>
+                        )}
+                    </Droppable>
+                </Box>
+            </Flex>
         </DragDropContext>
     );
 }
