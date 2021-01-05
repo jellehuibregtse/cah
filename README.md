@@ -58,13 +58,15 @@
 ## About The Project
 
 ### Built With
-The frontend has been build with:
-* React JS
-* Chakra UI
+The frontend is basically a React app that uses a component library.
+* [React JS](https://reactjs.org/)
+* [Chakra UI](https://chakra-ui.com/)
+* [react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd)
 
-The backend has been build with:
-* Java Spring Boot
-* PostgreSQL
+The backend uses a microservices architecture and is build with Java, Spring Boot Cloud, PostgreSQL and Maven.
+* [Spring Boot](https://spring.io/projects/spring-boot)
+* [PostgreSQL](https://www.postgresql.org/)
+* [Maven](https://maven.apache.org/)
 
 
 <!-- PROJECT STATUS -->
@@ -96,7 +98,7 @@ The backend has been build with:
 
 <!-- CONTRIBUTING -->
 ## Contributing
-
+All information is to be found in [CONTRIBUTING.md](https://github.com/jellehuibregtse/cah/blob/main/CONTRIBUTING.md).
 
 
 <!-- LICENSE -->
