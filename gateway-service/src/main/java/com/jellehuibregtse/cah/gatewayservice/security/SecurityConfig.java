@@ -55,6 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // Allow Sign up
             .antMatchers(HttpMethod.POST, "/api/auth-service/users/**")
             .permitAll()
+            .antMatchers(HttpMethod.GET, "/api/auth-service/users/**")
+            .permitAll()
             // Any other request must be authenticated.
             .anyRequest()
             .authenticated();

@@ -22,13 +22,11 @@ zuul:
   routes:
     auth-service:
       sensitive-headers: Cookie,Set-Cookie
-  ribbon:
-    eager-load:
-      enabled: true
   host:
     connect-timeout-millis: 10000
     socket-timeout-millis: 60000
   ignored-services: *
+  sensitive-headers: Cookie,Set-Cookie
 
 ribbon:
   eager-load:
