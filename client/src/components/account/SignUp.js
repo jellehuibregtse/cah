@@ -14,6 +14,8 @@ import {
 } from '@chakra-ui/react';
 
 import {InfoIcon, LockIcon} from '@chakra-ui/icons';
+import Validate from './Validate';
+import Auth from './Auth';
 
 export default function SignIn() {
     const [username, setUsername] = useState('');
@@ -25,13 +27,16 @@ export default function SignIn() {
         || password.length < 8
         || password !== confirmPassword;
 
-    const handleSignIn = (event) => {
+    const handleSignIn = async (event) => {
         event.preventDefault();
 
-        console.log('username', username);
-        console.log('password', password);
-
-        console.log('account was submitted!');
+        await Auth.handleSignUp(username, password).then(result => {
+            if (result === true) {
+                document.location.href='/sign-in';
+            } else {
+                alert(result);
+            }
+        }).catch(result => alert(result))
     };
 
     return (
