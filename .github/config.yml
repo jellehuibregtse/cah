@@ -20,7 +20,7 @@ firstPRMergeComment: >
 
 # Can be either a string :
 requestInfoReplyComment: >
-  Hey there, you didn't give us a lot of information on this issue. We would appreciate it if you could provide us with more details!
+  Hey there, you didn't give us a lot of information. We would appreciate it if you could provide us with more details!
 
 # default titles to check against for lack of descriptiveness
 # MUST BE ALL LOWERCASE
