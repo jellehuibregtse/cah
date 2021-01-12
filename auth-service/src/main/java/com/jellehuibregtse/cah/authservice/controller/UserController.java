@@ -1,12 +1,9 @@
 package com.jellehuibregtse.cah.authservice.controller;
 
-import com.jellehuibregtse.cah.authservice.model.ApplicationUser;
-import com.jellehuibregtse.cah.authservice.repository.ApplicationUserRepository;
+import com.jellehuibregtse.cah.authservice.model.ApplicationUserDto;
+import com.jellehuibregtse.cah.authservice.service.IApplicationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,18 +15,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private final PasswordEncoder passwordEncoder;
-    private final ApplicationUserRepository applicationUserRepository;
+    private final IApplicationUserService applicationUserService;
 
+    @Autowired
+    public UserController(IApplicationUserService applicationUserService) {
+        this.applicationUserService = applicationUserService;
+    }
+
+    /**
+     * If you can access this endpoint you are logged in, so we can always return true.
+     *
+     * @return true when endpoint is accessed.
+     */
     @GetMapping("/logged-in")
     public ResponseEntity<Boolean> loggedIn() {
         return ResponseEntity.ok(true);
-    }
-
-    @Autowired
-    public UserController(PasswordEncoder passwordEncoder, ApplicationUserRepository applicationUserRepository) {
-        this.passwordEncoder = passwordEncoder;
-        this.applicationUserRepository = applicationUserRepository;
     }
 
     /**
@@ -40,7 +40,7 @@ public class UserController {
      */
     @GetMapping
     public ResponseEntity<Boolean> usernameTaken(@RequestParam String username) {
-        return ResponseEntity.ok(applicationUserRepository.findByUsername(username).isPresent());
+        return ResponseEntity.ok(applicationUserService.isUsernameTaken(username));
     }
 
     /**
@@ -50,11 +50,10 @@ public class UserController {
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
     @PostMapping
-    public ResponseEntity<String> createApplicationUser(@RequestBody ApplicationUser user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        applicationUserRepository.save(user);
-
+    public ResponseEntity<String> createApplicationUser(@RequestBody ApplicationUserDto user) {
+        if (!applicationUserService.createApplicationUser(user)) {
+            return ResponseEntity.badRequest().body(String.format("Username %s is already taken.", user.getUsername()));
+        }
         return ResponseEntity.ok(String.format("User with username: %s has been successfully created!",
                                                user.getUsername()));
     }
@@ -65,20 +64,12 @@ public class UserController {
      * @param user that needs to be updated
      * @return message and HTTP status OK.
      */
-    @PutMapping
-    public ResponseEntity<String> updateApplicationUser(@RequestBody ApplicationUser user) {
-        var principal = getPrincipal();
-        var updatedApplicationUser = applicationUserRepository.findByUsername(principal)
-                                                              .orElseThrow(() -> new ResourceNotFoundException(
-                                                                      "Not found."));
-
-        updatedApplicationUser.setPassword(user.getPassword());
-        updatedApplicationUser.setUsername(user.getUsername());
-
-        applicationUserRepository.save(updatedApplicationUser);
-
-        return ResponseEntity.ok(String.format("User with id: %d has been successfully updated!",
-                                               updatedApplicationUser.getId()));
+    @PutMapping("{id}")
+    public ResponseEntity<String> updateApplicationUser(@RequestBody ApplicationUserDto user, @PathVariable long id) {
+        if (!applicationUserService.updateApplicationUser(user, id)) {
+            return ResponseEntity.badRequest().body(String.format("Username %s is already taken.", user.getUsername()));
+        }
+        return ResponseEntity.ok(String.format("User with id: %d has been successfully updated!", id));
     }
 
     /**
@@ -86,24 +77,10 @@ public class UserController {
      *
      * @return <code>ResponseEntity</code> with a message and HTTP status OK.
      */
-    @DeleteMapping
-    public ResponseEntity<String> deleteApplicationUser() {
-        var principal = getPrincipal();
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteApplicationUser(@PathVariable long id) {
+        applicationUserService.deleteApplicationUser(id);
 
-        var user = applicationUserRepository.findByUsername(principal)
-                                            .orElseThrow(() -> new ResourceNotFoundException("Not found."));
-
-        applicationUserRepository.delete(user);
-
-        return ResponseEntity.ok(String.format("User with id: %d has been successfully deleted!", user.getId()));
-    }
-
-    /**
-     * Gets the principal (username) of the currently logged in user.
-     *
-     * @return username.
-     */
-    private String getPrincipal() {
-        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(String.format("User with id: %d has been successfully deleted!", id));
     }
 }

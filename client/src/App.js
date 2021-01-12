@@ -1,61 +1,86 @@
-import React, {useEffect, useState} from "react";
-import "./css/App.css";
-import NavBar from "./components/NavBar"
-import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
-import Game from "./components/Game";
-import CreateCard from "./components/CreateCard";
-import Login from "./components/Login";
+import React from 'react';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { ChakraProvider, theme } from '@chakra-ui/react';
+import SignIn from './components/account/SignIn';
+import SignUp from './components/account/SignUp';
+import NavBar from './components/navigation/NavBar';
+import GameSearch from './components/game/game-search/GameSearch';
+import Game from './components/game/Game';
 
-import 'jquery/dist/jquery.min.js';
-import 'bootstrap/dist/js/bootstrap.min.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
+const parseSubFromJwt = (token) => {
+    try {
+        let base64Url = token.split('.')[1];
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        let jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
 
-const App = () => {
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [cards, setCards] = useState([]);
+        return JSON.parse(jsonPayload).sub;
+    } catch (e) {
+        return null;
+    }
+};
 
-    useEffect(() => {
-        if (sessionStorage.getItem("authToken") != null) {
-            setLoggedIn(true);
+export default function App() {
+    const cards = [
+        {
+            'id': '1',
+            'status': 'PLAYED',
+            'cardText': 'card1',
+            'cardType': 'WHITE'
+        },
+        {
+            'id': '2',
+            'status': 'PLAYED',
+            'cardText': 'card2',
+            'cardType': 'WHITE'
+        },
+        {
+            'id': '3',
+            'status': 'PLAYED',
+            'cardText': 'card3',
+            'cardType': 'WHITE'
+        },
+        {
+            'id': '3',
+            'status': 'PLAYED',
+            'cardText': 'card4',
+            'cardType': 'WHITE'
+        },
+        {
+            'id': '5',
+            'status': 'PLAYED',
+            'cardText': 'card5',
+            'cardType': 'WHITE'
+        },
+        {
+            'id': '6',
+            'status': 'NOT_PLAYED',
+            'cardText': 'card6',
+            'cardType': 'WHITE'
+        },
+        {
+            'id': '7',
+            'status': 'NOT_PLAYED',
+            'cardText': 'card7',
+            'cardType': 'WHITE'
         }
-
-        function fetchCards() {
-            setCards([
-                {
-                    "id": "1",
-                    "status": "PLAYED",
-                    "cardText": "card1",
-                    "cardType": "WHITE"
-                },
-                {
-                    "id": "2",
-                    "status": "NOT_PLAYED",
-                    "cardText": "card2",
-                    "cardType": "WHITE"
-                },
-                {
-                    "id": "3",
-                    "status": "NOT_PLAYED",
-                    "cardText": "card3",
-                    "cardType": "WHITE"
-                }
-            ]);
-        }
-
-        fetchCards();
-    }, []);
+    ];
+    const loggedIn = localStorage.getItem('token') != null;
 
     return (
-        <Router>
-            <NavBar loggedIn={loggedIn}/>
-            <Switch>
-                <Route path="/game" exact render={() => (<Game cards={cards}/>)}/>
-                <Route path="/admin" component={CreateCard}/>
-                <Route path="/login" component={Login}/>
-                <Route path="*"><Redirect to="/"/></Route>
-            </Switch>
-        </Router>
+        <ChakraProvider theme={theme}>
+            <Router>
+                <NavBar loggedIn={loggedIn}
+                        username={loggedIn ? parseSubFromJwt(localStorage.getItem('token')) : null}/>
+                <Switch>
+                    <Route path='/sign-in' component={SignIn}/>
+                    <Route path='/sign-up' component={SignUp}/>
+                    <Route path='/games' component={GameSearch}/>
+                    <Route path="/game" exact render={() => (<Game cards={cards}/>)}/>
+                    <Route path='*'><Redirect to='/games'/></Route>
+                </Switch>
+            </Router>
+        </ChakraProvider>
     );
 }
-
-export default App;

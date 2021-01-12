@@ -1,34 +1,28 @@
-import React, {useEffect, useState} from "react";
-import Card from "./fragments/Card";
-import {post} from "axios";
+import React, {useState} from 'react';
+import Card from '../game/Card';
 
 export default function CreateCard() {
 
-    const [text, setText] = useState("");
-    const [color, setColor] = useState("BLACK");
+    const [text, setText] = useState('');
+    const [color, setColor] = useState('BLACK');
 
     const updateText = event => {
         setText(event.target.value);
-    }
+    };
 
     const updateColor = event => {
         setColor(event.target.value);
-    }
+    };
 
     const handleSubmit = event => {
         event.preventDefault();
 
-        console.log("submit")
+        console.log('submit');
 
-        if (text.trim() === "") {
+        if (text.trim() === '') {
             return false;
         }
-
-        post('http://localhost/8101/cards/', {cardText: text, cardType: color})
-            .then(response => {
-                console.log(response)
-            });
-    }
+    };
 
     return (
         <div className="container mt-5">
@@ -40,7 +34,7 @@ export default function CreateCard() {
                             <textarea rows="8" className="form-control" id="cardText"
                                       placeholder="The text on the card" value={text} onChange={updateText}
                                       required autoFocus/>
-                            <div className="invalid-feedback" style={{width: "100%"}}>
+                            <div className="invalid-feedback" style={{width: '100%'}}>
                                 Card text cannot be empty.
                             </div>
                         </div>
@@ -64,5 +58,5 @@ export default function CreateCard() {
                 <button className="btn btn-primary btn-lg" type="submit">Create Card</button>
             </div>
         </div>
-    )
+    );
 }
