@@ -73,3 +73,12 @@ jobs:
         run: docker build -t $REPO:latest -t $REPO:${GITHUB_SHA::8} .
       - name: Publish Docker image
         run: docker push $REPO
+    
+  update:
+      name: Update service using webhooks
+      runs-on: ubuntu-latest
+      needs: [docker]
+
+      steps:
+        - name: Run curl POST request
+          run: curl -X POST ${{ secrets.WEBHOOK_AUTH_SERVICE }}
