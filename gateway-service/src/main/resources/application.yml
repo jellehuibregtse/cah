@@ -21,15 +21,19 @@ zuul:
   prefix: /api
   routes:
     auth-service:
+      path: /auth-service/**
+      service-id: auth-service
       sensitive-headers: Cookie,Set-Cookie
   host:
     connect-timeout-millis: 10000
     socket-timeout-millis: 60000
   sensitive-headers: Cookie,Set-Cookie
-  ignored-services: "*"
+  ignored-services: '*'
 
 ribbon:
   eager-load:
     enabled: true
   restclient:
+    enabled: true
+  eureka:
     enabled: true
